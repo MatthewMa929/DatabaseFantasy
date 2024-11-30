@@ -1,30 +1,67 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <style></style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Centered Links with Boxes</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f9f9f9;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        text-align: center;
+      }
+      .box {
+        margin: 10px;
+        padding: 15px;
+        border: 2px solid #000;
+        display: inline-block;
+        width: 200px;
+        text-align: center;
+        background-color: #fff;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      }
+      a {
+        text-decoration: none;
+        color: #000;
+        font-weight: bold;
+      }
+      a:hover {
+        color: #ff4d00;
+      }
+    </style>
   </head>
   <body>
-    <div class="box">
-      <a href="teams.html" target="=" _blank>My Teams</a>
-    </div>
-    <div class="box">
-      <a href="matches.html" target="=" _blank>Match List</a>
-    </div>
-    <div class="box">
-      <a href="drafts.html" target="=" _blank>Drafts</a>
-    </div>
-    <div class="box">
-      <a href="leagues.html" target="=" _blank>Leagues</a>
-    </div>
-    <div class="box">
-      <a href="playerDetails.html" target="=" _blank>Player Stats</a>
-    </div>
-    <div class="box">
-      <a href="waiver.html" target="=" _blank>Waivers</a>
-    </div>
-    <div class="box">
-      <a href="players.html" target="=" _blank>My Players</a>
+    <div class="container">
       <div class="box">
-        <a href="trades.html" target="=" _blank>Trads</a>
+        <a href="teams.html" target="_self">My Teams</a>
+      </div>
+      <div class="box">
+        <a href="matches.html" target="_self">Match List</a>
+      </div>
+      <div class="box">
+        <a href="drafts.html" target="_self">Drafts</a>
+      </div>
+      <div class="box">
+        <a href="leagues.html" target="_self">Leagues</a>
+      </div>
+      <div class="box">
+        <a href="playerDetails.html" target="_self">Player Stats</a>
+      </div>
+      <div class="box">
+        <a href="waiver.html" target="_self">Waivers</a>
+      </div>
+      <div class="box">
+        <a href="players.html" target="_self">My Players</a>
+      </div>
+      <div class="box">
+        <a href="trades.html" target="_self">Trades</a>
       </div>
     </div>
   </body>
