@@ -1,5 +1,5 @@
 <?php
-include "connect.php"; 
+include "../connect.php";
 
 $sql = "SELECT PlayerStatsID, PlayerID, game_date, performance_stats, injury_status FROM player_stats";
 

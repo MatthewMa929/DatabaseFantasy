@@ -1,5 +1,5 @@
 <?php
-include "connect.php"; 
+include "../connect.php";
 
 $sql = "SELECT UserID, full_name, email, username, password, profile_settings FROM user_data";
 

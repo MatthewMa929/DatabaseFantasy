@@ -1,5 +1,5 @@
 <?php
-include "connect.php"; 
+include "../connect.php";
 
 $sql = "SELECT MatchID, TeamID, match_date, final_score, winner FROM match_data";
 

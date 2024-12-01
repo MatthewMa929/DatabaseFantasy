@@ -1,5 +1,5 @@
 <?php
-include "connect.php"; 
+include "../connect.php";
 
 $sql = "SELECT TradeID, PlayerID, trade_date, teams_involved FROM trade";
 

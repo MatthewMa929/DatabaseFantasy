@@ -1,7 +1,7 @@
 <?php
-include "../connect.php";
+include "connect.php"; 
 
-$sql = "SELECT WaiverID, TeamID, waiver_status, waiver_pickup_date FROM waiver";
+$sql = "SELECT PlayerID, full_name, sport, real_team, position, fantasy_points, availability_status FROM player";
 
 $stmt = $conn->prepare($sql);
 $stmt->execute();
