@@ -1,12 +1,16 @@
 <?php
-    include "connect.php";
+    include "connect.php"; // Make sure $conn is a PDO object
 
-    $sql = "SELECT name, sport, position, real_team, total_points, status FROM players";
-    $result = mysqli_query($conn, $sql);
+    // Query to fetch data
+    $sql = "SELECT full_name, sport, position, real_team, fantasy_points, availability_status FROM player";
+    
+    // Prepare and execute the query using PDO
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
 
-    $stmt = $conn->prepare($sql); $stmt->execute(); 
-    echo 'Player information: <br />'; 
-    while ($row = $stmt->fetch()) { 
+    // Display player information
+    echo 'Player information: <br />';
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) { 
         echo '----------------------------------------<br />';
         echo "Name: " . $row["full_name"] . "<br />";
         echo "Sport: " . $row["sport"] . "<br />";
