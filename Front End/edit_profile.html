@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="user-page">
+    <header>
+        <h1>Edit Profile</h1>
+        <button onclick="window.location.href='user_dashboard.html'">Back to Dashboard</button>
+    </header>
+
+    <main class="user-main">
+        <form id="edit-profile-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" value="johndoe" required>
+
+            <label for="favorite-team">Favorite Team:</label>
+            <input type="text" id="favorite-team" name="favorite-team" value="Los Angeles Lakers" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="johndoe@gmail.com" required>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </main>
+
+    <script>
+        document.getElementById('edit-profile-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Updating user data if we are connecting it
+            alert('Profile updated successfully!');
+            window.location.href = 'user_dashboard.html'; 
+        });
+    </script>
+</body>
+</html>
+

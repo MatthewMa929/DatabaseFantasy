@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Trade Requests</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-page">
+    <header>
+        <h1>Manage Trade Requests</h1>
+        <button onclick="window.location.href='user_dashboard.html'">Back to Dashboard</button>
+    </header>
+
+    <main class="admin-main">
+        <table id="trade-table">
+            <thead>
+                <tr>
+                    <th>Team 1</th>
+                    <th>Team 2</th>
+                    <th>Players Involved</th>
+                    <th>Trade Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Los Angeles Lakers</td>
+                    <td>Golden State Warriors</td>
+                    <td>LeBron James ↔ Stephen Curry</td>
+                    <td>Pending</td>
+                    <td>
+                        <button onclick="approveTrade()">Approve</button>
+                        <button onclick="rejectTrade()">Reject</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Miami Heat</td>
+                    <td>Boston Celtics</td>
+                    <td>Jimmy Butler ↔ Jayson Tatum</td>
+                    <td>Approved</td>
+                    <td>
+                        <button onclick="approveTrade()">Approve</button>
+                        <button onclick="rejectTrade()">Reject</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        function approveTrade() {
+            alert("Trade Approved!");
+            // Connecting to approve or reject can be added here if we are using php or how Mat wants to do it.
+        }
+
+        function rejectTrade() {
+            alert("Trade Rejected!");
+            // Mat can add
+        }
+    </script>
+</body>
+</html>
+

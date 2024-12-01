@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Waiver Requests</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-page">
+    <header>
+        <h1>Manage Waiver Requests</h1>
+        <button onclick="window.location.href='user_dashboard.html'">Back to Dashboard</button>
+    </header>
+
+    <main class="admin-main">
+        <table id="waiver-table">
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Player</th>
+                    <th>Waiver Status</th>
+                    <th>Pickup Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Los Angeles Lakers</td>
+                    <td>LeBron James</td>
+                    <td>Pending</td>
+                    <td>2024-12-01</td>
+                    <td>
+                        <button onclick="approveWaiver()">Approve</button>
+                        <button onclick="rejectWaiver()">Reject</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Golden State Warriors</td>
+                    <td>Stephen Curry</td>
+                    <td>Approved</td>
+                    <td>2024-10-01</td>
+                    <td>
+                        <button onclick="approveWaiver()">Approve</button>
+                        <button onclick="rejectWaiver()">Reject</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        function approveWaiver() {
+            alert("Waiver Approved!");
+            // Mat can add
+        }
+
+        function rejectWaiver() {
+            alert("Waiver Rejected!");
+            // Mat can add
+        }
+    </script>
+</body>
+</html>
+

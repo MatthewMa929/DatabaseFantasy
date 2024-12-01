@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-page">
+
+    <div class="sidebar">
+        <h2>Admin Dashboard</h2>
+        <ul>
+            <li><button onclick="window.location.href='manage_leagues.html'">Manage Leagues</button></li>
+            <li><button onclick="window.location.href='manage_teams.html'">Manage Teams</button></li>
+            <li><button onclick="window.location.href='manage_players.html'">Manage Players</button></li>
+            <li><button onclick="window.location.href='waiver_management.html'">Waiver System</button></li>
+            <li><button onclick="window.location.href='trade_management.html'">Manage Trades</button></li>
+            <li><button onclick="window.location.href='draft_management.html'">Manage Drafts</button></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>Admin Dashboard</h1>
+        </header>
+
+        <main id="admin-main">
+            <section id="league-section">
+                <h2>Leagues</h2>
+                <button onclick="window.location.href='manage_leagues.html'">Manage Leagues</button>
+                <table id="league-table">
+                    <thead>
+                        <tr>
+                            <th>League Name</th>
+                            <th>League Type</th>
+                            <th>Max Teams</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>NBA</td>
+                            <td>Basketball</td>
+                            <td>30</td>
+                            <td>
+                                <button onclick="window.location.href='edit_league.html'">Edit</button>
+                                <button onclick="window.location.href='delete_league.html'">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

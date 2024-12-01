@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Your Team</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="user-page">
+    <header>
+        <h1>Manage Your Team</h1>
+        <button onclick="window.location.href='user_dashboard.html'">Back to Dashboard</button>
+    </header>
+
+    <main class="user-main">
+        <section id="current-team">
+            <h2>Your Fantasy Team</h2>
+            <table id="team-table">
+                <thead>
+                    <tr>
+                        <th>Player Name</th>
+                        <th>Sport</th>
+                        <th>Real Team</th>
+                        <th>Position</th>
+                        <th>Fantasy Points</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sample data -->
+                    <tr>
+                        <td>LeBron James</td>
+                        <td>Basketball</td>
+                        <td>Los Angeles Lakers</td>
+                        <td>Forward</td>
+                        <td>2500</td>
+                        <td><button onclick="removePlayer('LeBron James')">Remove</button></td>
+                    </tr>
+                    <tr>
+                        <td>Lionel Messi</td>
+                        <td>Soccer</td>
+                        <td>Inter Miami</td>
+                        <td>Forward</td>
+                        <td>3200</td>
+                        <td><button onclick="removePlayer('Lionel Messi')">Remove</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="available-players">
+            <h2>Available Players</h2>
+            <table id="available-players-table">
+                <thead>
+                    <tr>
+                        <th>Player Name</th>
+                        <th>Sport</th>
+                        <th>Real Team</th>
+                        <th>Position</th>
+                        <th>Fantasy Points</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Kevin Durant</td>
+                        <td>Basketball</td>
+                        <td>Phoenix Suns</td>
+                        <td>Forward</td>
+                        <td>2600</td>
+                        <td><button onclick="addToTeam('Kevin Durant')">Add to Team</button></td>
+                    </tr>
+                    <tr>
+                        <td>Stephen Curry</td>
+                        <td>Basketball</td>
+                        <td>Golden State Warriors</td>
+                        <td>Guard</td>
+                        <td>2800</td>
+                        <td><button onclick="addToTeam('Stephen Curry')">Add to Team</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        function addToTeam(playerName) {
+            alert(playerName + " has been added to your team!");
+            // Mat can add
+        }
+
+        function removePlayer(playerName) {
+            alert(playerName + " has been removed from your team.");
+            // Mat can add
+        }
+    </script>
+</body>
+</html>
+

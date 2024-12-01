@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="user-page">
+
+    <header>
+        <h1>User Dashboard</h1>
+        <button onclick="window.location.href='edit_profile.html'">Edit Profile</button>
+    </header>
+
+    <main class="user-main">
+        <section id="user-info">
+            <h2>Your Info</h2>
+            <p id="full-name-display">Full Name: John Doe</p>
+            <p id="username-display">Username: johndoe</p>
+            <p id="favorite-team-display">Favorite Team: Los Angeles Lakers</p>
+            <p id="fantasy-points-display">Total Fantasy Points: 2500</p>
+        </section>
+
+        <section id="team-management">
+            <h2>Your Fantasy Team</h2>
+            <button onclick="window.location.href='user_team.html'">Manage Team</button>
+            <table id="team-table">
+                <thead>
+                    <tr>
+                        <th>Player Name</th>
+                        <th>Sport</th>
+                        <th>Real Team</th>
+                        <th>Position</th>
+                        <th>Fantasy Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>LeBron James</td>
+                        <td>Basketball</td>
+                        <td>Los Angeles Lakers</td>
+                        <td>Forward</td>
+                        <td>2500</td>
+                    </tr>
+                    <tr>
+                        <td>Lionel Messi</td>
+                        <td>Soccer</td>
+                        <td>Inter Miami</td>
+                        <td>Forward</td>
+                        <td>3200</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="player-stats">
+            <h2>Player Stats</h2>
+            <button onclick="window.location.href='user_stats.html'">View Detailed Stats</button>
+            <table id="player-stats-table">
+                <thead>
+                    <tr>
+                        <th>Player Name</th>
+                        <th>Game Date</th>
+                        <th>Performance Stats</th>
+                        <th>Fantasy Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>LeBron James</td>
+                        <td>2024-10-01</td>
+                        <td>Scored 30 points, 10 assists, 8 rebounds</td>
+                        <td>50</td>
+                    </tr>
+                    <tr>
+                        <td>Lionel Messi</td>
+                        <td>2024-10-02</td>
+                        <td>Scored 2 goals and 1 assist</td>
+                        <td>60</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="waiver-trade">
+            <h2>Waivers & Trades</h2>
+            <button onclick="window.location.href='manage_waivers.html'">View Waiver Requests</button>
+            <button onclick="window.location.href='manage_trades.html'">View Trade Requests</button>
+        </section>
+
+        <section id="draft-info">
+            <h2>Your Draft Picks</h2>
+            <button onclick="window.location.href='manage_drafts.html'">View Draft Status</button>
+        </section>
+    </main>
+</body>
+</html>
+
+

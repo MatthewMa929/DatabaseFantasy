@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Players</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-page">
+    <header>
+        <h1>Manage Players</h1>
+        <button onclick="window.location.href='admin_dashboard.html'">Back to Dashboard</button>
+    </header>
+
+    <main class="admin-main">
+        <table id="player-table">
+            <thead>
+                <tr>
+                    <th>Player Name</th>
+                    <th>Sport</th>
+                    <th>Real Team</th>
+                    <th>Position</th>
+                    <th>Fantasy Points</th>
+                    <th>Availability Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Sample data -->
+                <tr>
+                    <td>LeBron James</td>
+                    <td>Basketball</td>
+                    <td>Los Angeles Lakers</td>
+                    <td>Forward</td>
+                    <td>2500</td>
+                    <td>Available</td>
+                    <td>
+                        <button onclick="addToTeam('LeBron James')">Add to Team</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Lionel Messi</td>
+                    <td>Soccer</td>
+                    <td>Inter Miami</td>
+                    <td>Forward</td>
+                    <td>3200</td>
+                    <td>Available</td>
+                    <td>
+                        <button onclick="addToTeam('Lionel Messi')">Add to Team</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+
+    <script>
+        function addToTeam(playerName) {
+            // Mat can add
+            alert(playerName + ' has been added to your team!');
+        }
+    </script>
+</body>
+</html>
+
