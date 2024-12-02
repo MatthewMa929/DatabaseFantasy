@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Player - Fantasy Sports Data Repository</title>
+    <link rel="stylesheet" href="{% static 'coreapp/player_search.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Leagues</a></li>
+                <li><a href="#">Teams</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Search Player</h1>
+        <div class="player-lookup-container">
+            <div class="search-id-container">
+                <h2>Search by Player ID</h2>
+                <input type="text" id="search-player-id" placeholder="Enter Player ID">
+                <button type="submit" class="search-button">Search</button>
+            </div>
+            <div class="search-name-container">
+                <h2>Search by Name</h2>
+                <input type="text" placeholder="First Name">
+                <input type="text" placeholder="Last Name">
+                <button type="submit" class="search-button">Search</button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>2024 Fantasy Sports Platform</p>
+    </footer>
+</body>
+
+</html>

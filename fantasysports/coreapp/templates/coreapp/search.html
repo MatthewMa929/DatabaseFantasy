@@ -1,0 +1,68 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Records - Fantasy Sports Data Repository</title>
+    <link rel="stylesheet" href="{% static 'coreapp/search.css' %}" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/search">Search</a></li>
+          <li><a href="/create">Create</a></li>
+          <li><a href="/activity">Activity</a></li>
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+    <div class="container">
+      <h1>Search Records</h1>
+      <div class="form-group">
+        <label for="table-select">Select Table:</label>
+        <select id="table-select" name="table" required>
+          <option value="">Select a table</option>
+          <option value="player">Players</option>
+          <option value="team">Teams</option>
+          <option value="league">Leagues</option>
+          <option value="match_data">Matches</option>
+          <option value="match_event">Match Events</option>
+          <option value="player_stats">Player Stats</option>
+          <option value="trade">Trades</option>
+          <option value="waiver">Waivers</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="search-input">Search:</label>
+        <input
+          type="text"
+          id="search-input"
+          name="search"
+          placeholder="Enter search value"
+        />
+        <button type="submit" id="search-btn">Search</button>
+      </div>
+      <div id="results-container"></div>
+      <div id="edit-modal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Edit Record</h2>
+          <form id="edit-form"></form>
+          <button type="submit" id="save-btn">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>2024 Fantasy Sports Platform</p>
+    </footer>
+    <script>
+      var hasWriteAccess = "{{ has_write_access|yesno:'true,false' }}";
+      hasWriteAccess = hasWriteAccess === "true";
+    </script>
+    <script src="{% static 'coreapp/search.js' %}"></script>
+    <script src="{% static 'coreapp/edit.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,684 @@
+body,
+html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: #f5f5f5;
+  /* Modern light grey background */
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.container {
+  background: white;
+  padding: 40px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: #333;
+  /* Dark grey color for the text */
+  margin-bottom: 30px;
+}
+
+.form {
+  margin-top: 30px;
+}
+
+input[type="button"] {
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 5px;
+  background: #008CBA;
+  /* Modern blue */
+  color: white;
+  cursor: pointer;
+  /* transition: background 0.3s ease, transform 0.1s ease; */
+}
+
+input[type="button"]:hover {
+  background: #005f73;
+  /* Darker shade of blue for hover state */
+  transform: translateY(-3px);
+}
+
+input[type="button"]:active {
+  transform: translateY(-1px);
+}
+
+
+
+/* LOOKUP */
+.lookup-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.lookup-container {
+  background: white;
+  padding: 40px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  /* Adjusted width for the lookup form */
+}
+
+.search-by-id,
+.search-by-name {
+  margin-bottom: 20px;
+}
+
+.search-button {
+  padding: 10px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background: #008CBA;
+  /* Using the modern blue from previous CSS */
+  color: white;
+}
+
+.search-button:hover {
+  background: #005f73;
+  /* Darker shade for hover effect */
+  transform: translateY(-3px);
+}
+
+.search-button:active {
+  transform: translateY(-1px);
+}
+
+label {
+  display: block;
+  margin-top: 20px;
+}
+
+input[type="text"] {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  width: calc(100% - 22px);
+  /* Adjust width to account for padding and border */
+}
+
+
+
+/* FOR LOGIN.HTML */
+
+.login-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.login-container {
+  background: white;
+  padding: 40px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  /* Adjusted width for better proportion */
+}
+
+h1 {
+  color: #333;
+  /* Dark grey color for the text */
+  margin-bottom: 30px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input[type="email"],
+input[type="password"] {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  width: 100%;
+  /* Full width of the form */
+}
+
+.helper-text {
+  font-size: 0.8em;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.helper-text a {
+  color: #008CBA;
+  /* Modern blue */
+  text-decoration: none;
+  margin: 0 10px;
+  transition: color 0.3s ease;
+}
+
+.helper-text a:hover {
+  color: #005f73;
+  /* Darker shade of blue for hover state */
+}
+
+input[type="submit"] {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background: #008CBA;
+  /* Modern blue */
+  color: white;
+  cursor: pointer;
+  width: 100%;
+  /* Full width of the form */
+}
+
+input[type="submit"]:hover {
+  background: #005f73;
+  /* Darker shade of blue for hover state */
+  transform: translateY(-3px);
+}
+
+input[type="submit"]:active {
+  transform: translateY(-1px);
+}
+
+/* FOR REGISTER PAGE*/
+.registration-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f5f5f5;
+  /* Consistent light grey background */
+}
+
+.registration-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  /* Set a fixed width for the form */
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"] {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  /* Consistent styling for input fields */
+}
+
+.terms-service {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.terms-service input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border-radius: 5px;
+}
+
+.terms-service:hover input~.checkmark {
+  background-color: #ccc;
+}
+
+.terms-service input:checked~.checkmark {
+  background-color: #2196F3;
+}
+
+.register-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background: #4CAF50;
+  /* Consistent green color for register button */
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-button:hover {
+  background-color: #45a049;
+  /* Slightly darker green on hover */
+}
+
+.bottom-message {
+  position: absolute; /* or 'relative' depending on your layout */
+  bottom: 0; /* Aligns the message at the bottom of its parent container */
+  width: 100%; /* Ensures the div spans the full width of its parent */
+  background-color: #f2f2f2; /* A light grey background */
+  text-align: center; /* Centers the text within the div */
+  padding: 20px 0; /* Adds padding above and below the text */
+  border-top: 2px solid #ccc; /* A light grey border line at the top of the div */
+}
+
+/* Inmate Lookup*/
+
+.lookup-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.lookup-container {
+  background: white;
+  padding: 40px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 350px; /* Adjusted width for the lookup form */
+}
+
+.search-by-id,
+.search-by-name {
+  margin-bottom: 20px;
+}
+
+.search-button {
+  padding: 10px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background: #008CBA; /* Using the modern blue from previous CSS */
+  color: white;
+}
+
+.search-button:hover {
+  background: #005f73; /* Darker shade for hover effect */
+  transform: translateY(-3px);
+}
+
+.search-button:active {
+  transform: translateY(-1px);
+}
+
+label {
+  display: block;
+  margin-top: 20px;
+}
+
+input[type="text"] {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  width: calc(100% - 22px); /* Adjust width to account for padding and border */
+}
+
+/* ADD CRIME */
+.add-crime-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.add-crime-container {
+  background: white;
+  padding: 40px;
+  text-align: left;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 400px; /* Adjusted width for the form */
+}
+
+.add-crime-form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+input[type="text"] {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  width: calc(100% - 22px); /* Adjust width to account for padding and border */
+}
+
+input[type="submit"] {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  background: #008CBA; /* Using the modern blue from previous CSS */
+  color: white;
+  cursor: pointer;
+  margin-top: 20px; /* Add space above the submit button */
+  width: 100%; /* Full width of the form */
+}
+
+input[type="submit"]:hover {
+  background: #005f73; /* Darker shade for hover effect */
+  transform: translateY(-3px);
+}
+
+input[type="submit"]:active {
+  transform: translateY(-1px);
+}
+
+
+/* Add Officer*/
+
+.add-officer-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.add-officer-container {
+  background: white;
+  padding: 40px;
+  text-align: left;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 400px; /* Consistent width with other forms */
+}
+
+.add-officer-form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+input[type="text"] {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  width: calc(100% - 22px);
+}
+
+.more-crimes-button {
+  background: #f5f5f5; /* Light grey background */
+  color: #333; /* Dark grey text */
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px; /* Add space above the button */
+  width: 100%; /* Full width of the form */
+}
+
+.more-crimes-button:hover {
+  background: #ddd; /* Darker grey for hover */
+  color: #000; /* Black text for hover */
+}
+
+input[type="submit"] {
+  /* Reuse styles from previous submit button CSS */
+}
+
+/* Add inmate */
+.inmate-lookup-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: #f5f5f5; /* Light grey background for the whole page */
+}
+
+.inmate-lookup-container {
+  background: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 350px; /* Adjusted for the lookup form */
+}
+
+.search-id-container,
+.search-name-container {
+  margin-bottom: 20px;
+}
+
+.search-button {
+  padding: 10px 20px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #008CBA; /* Consistent modern blue */
+  color: white;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background: #005f73; /* Darker blue on hover */
+  transform: translateY(-3px);
+}
+
+.search-button:active {
+  transform: translateY(-1px);
+}
+
+label, h2 {
+  display: block;
+  margin-bottom: 10px;
+  color: #333; /* Dark grey color */
+  font-size: 1.2em;
+}
+
+input[type="text"] {
+  width: calc(100% - 22px); /* Accounting for padding and borders */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px; /* Space between inputs */
+}
+
+/* Prison Details */
+.prisoner-details-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f5f5f5; /* Consistent light grey background */
+}
+
+.prisoner-details-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: auto; /* Adjust width as necessary */
+}
+
+.details-section, .crimes-section, .sentences-section {
+  margin-bottom: 20px;
+}
+
+.update-button, .delete-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.update-button {
+  background: #4CAF50; /* Green for update */
+  color: white;
+}
+
+.delete-button {
+  background: #f44336; /* Red for delete */
+  color: white;
+}
+
+.update-button:hover, .delete-button:hover {
+  transform: translateY(-2px); /* Hover effect */
+}
+
+.update-button:active, .delete-button:active {
+  transform: translateY(-1px); /* Click effect */
+}
+
+h2 {
+  color: #333; /* Dark grey for section titles */
+  border-bottom: 1px solid #ccc; /* Line under section titles */
+  padding-bottom: 10px;
+}
+
+p {
+  font-size: 0.9em; /* Slightly smaller font for details */
+  line-height: 1.6; /* Space out lines */
+  color: #666; /* Lighter text for readability */
+}
+
+
+/* Crime Details */
+
+.crime-details-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f5f5f5; /* Consistent light grey background */
+}
+
+.crime-details-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: auto; /* Adjust width as necessary */
+}
+
+.crime-info, .sentence-info, .monetary-info, .appeal-info {
+  margin-bottom: 20px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.update {
+  background: #4CAF50; /* Green for update */
+  color: white;
+}
+
+.delete {
+  background: #f44336; /* Red for delete */
+  color: white;
+}
+
+.update:hover, .delete:hover {
+  transform: scale(1.05); /* Slightly enlarges the buttons on hover */
+}
+
+.update:active, .delete:active {
+  transform: scale(0.95); /* Slightly reduces the buttons when clicked */
+}
+
+h2 {
+  color: #333;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+p {
+  font-size: 0.9em;
+  line-height: 1.6;
+  color: #666;
+}
+
+
+/* Prisoner Search */
+.search-results-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f5f5f5; /* Consistent light grey background */
+}
+
+.search-results-table {
+  width: 100%; /* Full width of the container */
+  max-width: 800px; /* Maximum width for better readability */
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.search-results-table thead th {
+  background-color: #008CBA; /* Modern blue for header */
+  color: white;
+  padding: 10px;
+  text-align: left;
+}
+
+.search-results-table tbody td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd; /* Light grey border for separation */
+  background-color: white; /* White background for rows */
+}
+
+.search-results-table tbody tr:hover {
+  background-color: #f1f1f1; /* Light grey for hover effect */
+  cursor: pointer;
+}
+
+h1 {
+  color: #333; /* Dark grey color for the title */
+  margin-bottom: 20px;
+}
+
+

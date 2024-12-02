@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Player - Fantasy Sports Data Repository</title>
+    <link rel="stylesheet" href="{% static 'coreapp/add_player.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body>
+    <div class="add-player-wrapper">
+        <div class="add-player-container">
+            <h1>Add Player</h1>
+            <form class="add-player-form">
+                <label for="Player ID">Player ID:</label>
+                <input type="text" id="player_id" placeholder="00000">
+
+                <label for="full_name">Full Name:</label>
+                <input type="text" id="full_name" placeholder="Enter full name">
+
+                <label for="sport">Sport:</label>
+                <input type="text" id="sport" placeholder="Enter sport (e.g., Football)">
+
+                <label for="real_team">Real Team:</label>
+                <input type="text" id="real_team" placeholder="Enter team name">
+
+                <label for="position">Position:</label>
+                <input type="text" id="position" placeholder="Enter player position">
+
+                <label for="fantasy_points">Fantasy Points:</label>
+                <input type="number" id="fantasy_points" placeholder="Enter initial points" step="0.1">
+
+                <label for="availability_status">Availability Status:</label>
+                <select id="availability_status">
+                    <option value="Available">Available</option>
+                    <option value="Injured">Injured</option>
+                    <option value="Suspended">Suspended</option>
+                </select>
+
+                <button type="button" class="more-teams-button">+Add to Another Team</button>
+
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

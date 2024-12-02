@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Team</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="add-team-wrapper">
+        <div class="add-team-container">
+            <h1>Add Team</h1>
+            <form class="add-team-form">
+                <label for="team_id">Team ID:</label>
+                <input type="text" id="team_id" placeholder="00000">
+
+                <label for="league_id">League ID:</label>
+                <input type="text" id="league_id" placeholder="Enter league ID">
+
+                <label for="user_id">User ID:</label>
+                <input type="text" id="user_id" placeholder="Enter user ID">
+
+                <label for="team_name">Team Name:</label>
+                <input type="text" id="team_name" placeholder="Enter team name">
+
+                <label for="total_points_scored">Total Points Scored:</label>
+                <input type="number" id="total_points_scored" placeholder="Enter points scored" step="0.1">
+
+                <label for="ranking">Ranking:</label>
+                <input type="number" id="ranking" placeholder="Enter team ranking">
+
+                <label for="status">Status:</label>
+                <select id="status">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+
+                <h2>Players in the Team:</h2>
+                <!-- Repeat this input block for as many Player IDs as needed -->
+                <label for="player_id_1">Player ID:</label>
+                <input type="text" id="player_id_1" placeholder="Enter player ID">
+
+                <button type="button" class="more-players-button">+Add More Players</button>
+
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

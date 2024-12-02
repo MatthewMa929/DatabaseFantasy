@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Match</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="add-match-wrapper">
+        <div class="add-match-container">
+            <h1>Add Match</h1>
+            <form class="add-match-form">
+                <label for="match_id">Match ID:</label>
+                <input type="text" id="match_id" placeholder="00000">
+
+                <label for="team_id">Team ID:</label>
+                <input type="text" id="team_id" placeholder="Enter team ID">
+
+                <label for="match_date">Match Date:</label>
+                <input type="date" id="match_date">
+
+                <label for="final_score">Final Score:</label>
+                <input type="number" id="final_score" placeholder="Enter final score" step="0.1">
+
+                <label for="winner">Winner (Team ID):</label>
+                <input type="text" id="winner" placeholder="Enter winning team ID">
+
+                <h2>Match Events:</h2>
+                <!-- Repeat this input block for as many events as needed -->
+                <label for="event_type_1">Event Type:</label>
+                <input type="text" id="event_type_1" placeholder="Enter event type (e.g., Goal, Assist)">
+
+                <label for="player_id_1">Player ID:</label>
+                <input type="text" id="player_id_1" placeholder="Enter player ID">
+
+                <label for="event_time_1">Event Time (minutes):</label>
+                <input type="number" id="event_time_1" placeholder="Enter event time">
+
+                <label for="fantasy_points_1">Fantasy Points:</label>
+                <input type="number" id="fantasy_points_1" placeholder="Enter fantasy points" step="0.1">
+
+                <button type="button" class="more-events-button">+Add More Events</button>
+
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portal</title>
+    <link rel="stylesheet" href="{% static 'coreapp/query.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/search">Search</a></li>
+          <li><a href="/create">Create</a></li>
+          <li><a href="/activity">Activity</a></li>
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+    <div class="container">
+      <h1>Welcome to the Portal</h1>
+      <div class="quick-access">
+        <div class="section">
+          <a href="/search" class="button"
+            ><i class="fas fa-search"></i> Search</a
+          >
+        </div>
+        <div class="section">
+          <a href="/create" class="button"
+            ><i class="fas fa-plus-circle"></i> Create</a
+          >
+        </div>
+        <div class="section">
+          <a href="/activity" class="button"
+            ><i class="fas fa-chart-line"></i> Activity</a
+          >
+        </div>
+      </div>
+      {% if has_write_access %}
+      <p>{{ request.user.username }} has permission write access. You can create, edit, and delete data.</p>
+      {% else %}
+      <p>
+        {{ request.user.username }} does not have write access. You will not be
+        able to create, edit, or delete data.
+      </p>
+      {% endif %}
+    </div>
+  </body>
+  <footer>
+    <p>2024 NYU School of Engineering</p>
+  </footer>
+</html>

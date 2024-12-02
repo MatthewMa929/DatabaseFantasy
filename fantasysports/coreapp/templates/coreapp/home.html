@@ -1,0 +1,41 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Fantasy Sports Data Repository</title>
+    <link rel="stylesheet" href="{% static 'coreapp/home.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script> document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("login-button").addEventListener("click", function () { window.location.href = "/login"; });
+            document.getElementById("register-button").addEventListener("click", function () {
+                window.location.href = "/register";
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Welcome to the<br>Fantasy Sports Data Repository</h1>
+        <div class="button-container">
+            <button id="login-button"><i class="fas fa-sign-in-alt"></i> Login</button>
+            <button id="register-button"><i class="fas fa-user-plus"></i> Register</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>2024 NYU School of Engineering</p>
+    </footer>

@@ -1,0 +1,58 @@
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Record - Fantasy Sports Data Repository</title>
+    <link rel="stylesheet" href="{% static 'coreapp/create.css' %}">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/search">Search</a></li>
+              <li><a href="/create">Create</a></li>
+              <li><a href="/activity">Activity</a></li>
+              <li><a href="/logout">Logout</a></li>
+            </ul>
+          </nav>
+    </header>
+    <div class="container">
+        <h1>Create Record</h1>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                {% endfor %}
+        </ul>
+        {% endif %}
+        <form id="create-form" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="table-select">Select Table:</label>
+                <select id="table-select" name="table" required>
+                    <option value="">Select a table</option>
+                    <option value="player">Players</option>
+                    <option value="team">Teams</option>
+                    <option value="league">Leagues</option>
+                    <option value="match_data">Matches</option>
+                    <option value="match_event">Match Events</option>
+                    <option value="player_stats">Player Stats</option>
+                    <option value="trade">Trades</option>
+                    <option value="waiver">Waivers</option>
+                </select>
+            </div>
+            <div id="fields-container"></div>
+            <button type="submit">Create</button>
+        </form>
+    </div>
+    <footer>
+        <p>2024 Fantasy Sports Platform</p>
+    </footer>
+    <script src="{% static 'coreapp/create.js' %}"></script>
+</body>
+
+</html>
