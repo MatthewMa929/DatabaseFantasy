@@ -1,1 +1,1 @@
-Prison System Website done in Django and PostgreSQL
+Fantasy Sports Website created with Django and PostgreSQL
