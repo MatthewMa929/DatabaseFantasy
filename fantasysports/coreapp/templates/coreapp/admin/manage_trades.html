@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Trades</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="manage-trades-wrapper">
+        <div class="manage-trades-container">
+            <h1>Manage Trades</h1>
+            <button onclick="window.location.href='admin_dashboard.html'">Back to Dashboard</button>
+
+            <div class="trade-management-section">
+                <h2>Trade Requests</h2>
+                <table id="trade-list">
+                    <thead>
+                        <tr>
+                            <th>Trade ID</th>
+                            <th>Player ID</th>
+                            <th>Trade Date</th>
+                            <th>Teams Involved</th>
+                            <th>Trade Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Sample Data -->
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>2024-09-15</td>
+                            <td>Los Angeles Lakers, Miami Heat</td>
+                            <td>Pending</td>
+                            <td>
+                                <button onclick="approveTrade(1)">Approve</button>
+                                <button onclick="rejectTrade(1)">Reject</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>2024-08-20</td>
+                            <td>Inter Miami, FC Barcelona</td>
+                            <td>Approved</td>
+                            <td>
+                                <button onclick="approveTrade(2)">Approve</button>
+                                <button onclick="rejectTrade(2)">Reject</button>
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="add-trade-section">
+                <button onclick="window.location.href='add_trade.html'">Add New Trade</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Approve Backend
+        function approveTrade(tradeId) {
+            if (confirm('Are you sure you want to approve this trade?')) {
+                // Code I dunno how you do it
+                alert('Trade ' + tradeId + ' approved!');
+            }
+        }
+
+        // Reject Backend
+        function rejectTrade(tradeId) {
+            if (confirm('Are you sure you want to reject this trade?')) {
+                // Code
+                alert('Trade ' + tradeId + ' rejected!');
+            }
+        }
+    </script>
+</body>
+
+</html>
+

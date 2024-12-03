@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Matches</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="manage-matches-wrapper">
+        <div class="manage-matches-container">
+            <h1>Manage Matches</h1>
+            <button onclick="window.location.href='admin_dashboard.html'">Back to Dashboard</button>
+
+            <div class="match-management-section">
+                <h2>Matches List</h2>
+                <table id="match-list">
+                    <thead>
+                        <tr>
+                            <th>Match ID</th>
+                            <th>Team 1</th>
+                            <th>Team 2</th>
+                            <th>Match Date</th>
+                            <th>Final Score</th>
+                            <th>Winner</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Sample Data -->
+                        <tr>
+                            <td>1</td>
+                            <td>Los Angeles Lakers</td>
+                            <td>Golden State Warriors</td>
+                            <td>2024-10-01</td>
+                            <td>120-115</td>
+                            <td>Los Angeles Lakers</td>
+                            <td>
+                                <button onclick="window.location.href='edit_match.html'">Edit</button>
+                                <button onclick="deleteMatch(1)">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Inter Miami</td>
+                            <td>NYCFC</td>
+                            <td>2024-11-01</td>
+                            <td>2-1</td>
+                            <td>Inter Miami</td>
+                            <td>
+                                <button onclick="window.location.href='edit_match.html'">Edit</button>
+                                <button onclick="deleteMatch(2)">Delete</button>
+                            </td>
+                        </tr>
+                       
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="add-match-section">
+                <button onclick="window.location.href='add_match.html'">Add New Match</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Backend
+        function deleteMatch(matchId) {
+            if (confirm('Are you sure you want to delete this match?')) {
+                // Code
+                alert('Match ' + matchId + ' deleted!');
+            }
+        }
+    </script>
+</body>
+
+</html>
+
