@@ -74,6 +74,8 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def manage_view(request):
     if request.method == 'POST':
+        operation = request.POST.get('operation')
+        
         # #Change this to fit whatever the dropdown bar value is
         # # Draft table
         # draft_id = request.POST.get('DraftID')
