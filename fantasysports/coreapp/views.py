@@ -34,14 +34,14 @@ def edit_record(request):
 
     data = json.loads(request.body)
     table = data.get('table')
-    player_id = data.get('id')  # The unique identifier for the record
+    record_id = data.get('id')  # The unique identifier for the record
     updates = data.get('updates')  # Dictionary of fields to update
 
     query_dict = {
-        'player': "UPDATE player SET {updates} WHERE player_id = %s",
-        'team': "UPDATE team SET {updates} WHERE team_id = %s",
-        'league': "UPDATE league SET {updates} WHERE league_id = %s",
-        'match_data': "UPDATE match_data SET {updates} WHERE match_id = %s",
+        'player': "UPDATE player SET {updates} WHERE PlayerID = %s",
+        'team': "UPDATE team SET {updates} WHERE TeamID = %s",
+        'league': "UPDATE league SET {updates} WHERE LeagueID = %s",
+        'match_data': "UPDATE match_data SET {updates} WHERE MatchID = %s",
     }
 
     try:
@@ -52,7 +52,7 @@ def edit_record(request):
         # Dynamically create the SET clause and parameters
         set_clause = ', '.join([f"{key} = %s" for key in updates.keys()])
         values = list(updates.values())
-        values.append(player_id)  # Add player_id as the last parameter
+        values.append(record_id)  # Add record_id as the last parameter
         query = query.replace("{updates}", set_clause)
 
         with connection.cursor() as cursor:
@@ -114,7 +114,7 @@ def manage_view(request):
         # team_id = request.POST.get('TeamID')
 
         # Player table
-        player_id = request.POST.get('PlayerID')
+        record_id = request.POST.get('record_id')
         full_name = request.POST.get('full_name')
         sport = request.POST.get('sport')
         real_team = request.POST.get('real_team')
@@ -171,23 +171,23 @@ def manage_view(request):
 
                 elif operation == 'update':
                     # Update an existing player
-                    if not player_id:
+                    if not record_id:
                         messages.error(request, "Record ID is required for update.")
                     else:
                         cursor.execute("""
                             UPDATE player
                             SET full_name = %s, sport = %s, real_team = %s, position = %s, fantasy_points = %s, availability_status = %s
-                            WHERE player_id = %s
-                        """, [full_name, sport, real_team, position, fantasy_points, availability_status, player_id])
-                        messages.success(request, f"Player with ID {player_id} updated successfully.")
+                            WHERE PlayerID = %s
+                        """, [full_name, sport, real_team, position, fantasy_points, availability_status, record_id])
+                        messages.success(request, f"Player with ID {record_id} updated successfully.")
 
                 elif operation == 'delete':
                     # Delete an existing player
-                    if not player_id:
+                    if not record_id:
                         messages.error(request, "Record ID is required for delete.")
                     else:
-                        cursor.execute("DELETE FROM player WHERE player_id = %s", [player_id])
-                        messages.success(request, f"Player with ID {player_id} deleted successfully.")
+                        cursor.execute("DELETE FROM player WHERE PlayerID = %s", [record_id])
+                        messages.success(request, f"Player with ID {record_id} deleted successfully.")
 
                 else:
                     messages.error(request, "Invalid operation type selected.")
@@ -241,13 +241,13 @@ def delete_record(request):
 
     data = json.loads(request.body)
     table = data.get('table')
-    player_id = data.get('id')  # The unique identifier for the record
+    record_id = data.get('id')  # The unique identifier for the record
 
     query_dict = {
-        'player': "DELETE FROM player WHERE player_id = %s",
-        'team': "DELETE FROM team WHERE team_id = %s",
-        'league': "DELETE FROM league WHERE league_id = %s",
-        'match_data': "DELETE FROM match_data WHERE match_id = %s",
+        'player': "DELETE FROM player WHERE PlayerID = %s",
+        'team': "DELETE FROM team WHERE TeamID = %s",
+        'league': "DELETE FROM league WHERE LeagueID = %s",
+        'match_data': "DELETE FROM match_data WHERE MatchID = %s",
     }
 
     try:
@@ -256,7 +256,7 @@ def delete_record(request):
             return JsonResponse({'success': False, 'error': 'Invalid table selected.'}, status=400)
 
         with connection.cursor() as cursor:
-            cursor.execute(query, [player_id])
+            cursor.execute(query, [record_id])
 
         return JsonResponse({'success': True, 'message': 'Record deleted successfully.'})
 
@@ -442,7 +442,7 @@ def perform_search(request):
         'player': "SELECT full_name, sport, real_team, position, fantasy_points, availability_status FROM player WHERE full_name ILIKE %s",
         'team': "SELECT team_name, total_points_scored, ranking, status FROM team WHERE team_name ILIKE %s",
         'league': "SELECT league_name, league_type, draft_date, max_teams FROM league WHERE league_name ILIKE %s",
-        'match_data': "SELECT match_date, final_score, winner FROM match_data WHERE team_id IN (SELECT team_id FROM team WHERE team_name ILIKE %s",
+        'match_data': "SELECT match_date, final_score, winner FROM match_data WHERE TeamID IN (SELECT TeamID FROM team WHERE team_name ILIKE %s",
     }
 
     try:
@@ -470,14 +470,14 @@ def edit_record(request):
 
     data = json.loads(request.body)
     table = data.get('table')
-    player_id = data.get('id')  # The unique identifier for the record
+    record_id = data.get('id')  # The unique identifier for the record
     updates = data.get('updates')  # Dictionary of fields to update
 
     query_dict = {
-        'player': "UPDATE player SET {updates} WHERE player_id = %s",
-        'team': "UPDATE team SET {updates} WHERE team_id = %s",
-        'league': "UPDATE league SET {updates} WHERE league_id = %s",
-        'match_data': "UPDATE match_data SET {updates} WHERE match_id = %s",
+        'player': "UPDATE player SET {updates} WHERE PlayerID = %s",
+        'team': "UPDATE team SET {updates} WHERE TeamID = %s",
+        'league': "UPDATE league SET {updates} WHERE LeagueID = %s",
+        'match_data': "UPDATE match_data SET {updates} WHERE MatchID = %s",
     }
 
     try:
@@ -488,7 +488,7 @@ def edit_record(request):
         # Dynamically create the SET clause and parameters
         set_clause = ', '.join([f"{key} = %s" for key in updates.keys()])
         values = list(updates.values())
-        values.append(player_id)  # Add player_id as the last parameter
+        values.append(record_id)  # Add record_id as the last parameter
         query = query.replace("{updates}", set_clause)
 
         with connection.cursor() as cursor:
