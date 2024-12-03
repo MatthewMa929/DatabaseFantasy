@@ -1,0 +1,135 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Teams - Fantasy Sports</title>
+    <link rel="stylesheet" href="{% static 'coreapp/manage.css' %}">
+</head>
+<body class="user-page">
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/search">Search</a></li>
+                <li><a href="/manage">Manage</a></li>
+                <li><a href="/activity">Activity</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Manage Teams</h1>
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <section id="view-teams">
+            <h2>View Your Teams</h2>
+            <table id="teams-table">
+                <thead>
+                    <tr>
+                        <th>Team Name</th>
+                        <th>League</th>
+                        <th>Total Points</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team in teams %}
+                    <tr>
+                        <td>{{ team.team_name }}</td>
+                        <td>{{ team.league_name }}</td>
+                        <td>{{ team.total_points_scored }}</td>
+                        <td>{{ team.status }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No teams found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section id="manage-team">
+            <h2>Manage Team</h2>
+            <form id="manage-form" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="operation">Select Operation:</label>
+                    <div id="operation-options">
+                        <input type="radio" id="create" name="operation" value="create" checked>
+                        <label for="create">Create</label>
+                        <input type="radio" id="update" name="operation" value="update">
+                        <label for="update">Update</label>
+                        <input type="radio" id="delete" name="operation" value="delete">
+                        <label for="delete">Delete</label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="record-id-group" style="display: none;">
+                    <label for="record-id">Team ID:</label>
+                    <input type="number" id="record-id" name="record_id" placeholder="Enter Team ID">
+                </div>
+
+                <div id="fields-container">
+                    <div class="form-group">
+                        <label for="team_name">Team Name:</label>
+                        <input type="text" id="team_name" name="team_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="league">League:</label>
+                        <input type="text" id="league" name="league">
+                    </div>
+                    <div class="form-group">
+                        <label for="total_points_scored">Total Points Scored:</label>
+                        <input type="number" id="total_points_scored" name="total_points_scored">
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status:</label>
+                        <select id="status" name="status">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+    </div>
+
+    <footer>
+        <p>2024 Fantasy Sports Platform</p>
+    </footer>
+
+    <script>
+        const operationOptions = document.getElementsByName('operation');
+        const recordIdGroup = document.getElementById('record-id-group');
+        const fieldsContainer = document.getElementById('fields-container');
+
+        operationOptions.forEach(option => {
+            option.addEventListener('change', function () {
+                if (this.value === 'delete') {
+                    fieldsContainer.style.display = 'none';
+                    recordIdGroup.style.display = 'block';
+                } else if (this.value === 'update') {
+                    fieldsContainer.style.display = 'block';
+                    recordIdGroup.style.display = 'block';
+                } else {
+                    fieldsContainer.style.display = 'block';
+                    recordIdGroup.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

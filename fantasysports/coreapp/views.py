@@ -537,3 +537,31 @@ def edit_record(request):
 
     except Exception as e:
         return JsonResponse({'success': False, 'error': 'An error occurred: ' + str(e)}, status=400)
+
+@csrf_protect
+@login_required
+def front_page(request):
+    data = {}
+    if request.method == 'POST':
+        table_name = request.POST.get('table')  # Get the selected table
+        
+        valid_tables = ['player', 'team', 'league', 'match_data']
+        if table_name not in valid_tables:
+            return JsonResponse({'error': 'Invalid table name'}, status=400)
+
+        try:
+            with connection.cursor() as cursor:
+                # Fetch data from the specified table
+                cursor.execute(f"SELECT * FROM {table_name} LIMIT 20")  
+                rows = cursor.fetchall()
+                columns = [col[0] for col in cursor.description]  
+
+                if rows:
+                    data = {'columns': columns, 'rows': rows}
+                else:
+                    data = {'columns': columns, 'rows': 'Null.'}
+
+        except Exception as e:
+            data['error'] = f"Error fetching data: {str(e)}"
+
+    return render(request, 'coreapp/front_page.html', {'data': data})
