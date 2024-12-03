@@ -14,7 +14,7 @@ class UserData(models.Model):
 
 
 class League(models.Model):
-    league_id = models.AutoField(primary_key=True)
+    LeagueID = models.AutoField(primary_key=True)
     user = models.ForeignKey(UserData, on_delete=models.CASCADE)
     league_name = models.CharField(max_length=100)
     league_type = models.CharField(max_length=50)
@@ -26,7 +26,7 @@ class League(models.Model):
 
 
 class Team(models.Model):
-    team_id = models.AutoField(primary_key=True)
+    TeamID = models.AutoField(primary_key=True)
     league = models.ForeignKey(League, on_delete=models.CASCADE)
     user = models.ForeignKey(UserData, on_delete=models.CASCADE)
     team_name = models.CharField(max_length=100)
@@ -39,7 +39,7 @@ class Team(models.Model):
 
 
 class Player(models.Model):
-    player_id = models.AutoField(primary_key=True)
+    PlayerID = models.AutoField(primary_key=True)
     full_name = models.CharField(max_length=100)
     sport = models.CharField(max_length=50)
     real_team = models.CharField(max_length=100)
@@ -52,18 +52,18 @@ class Player(models.Model):
 
 
 class MatchData(models.Model):
-    match_id = models.AutoField(primary_key=True)
+    MatchID = models.AutoField(primary_key=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     match_date = models.DateField()
     final_score = models.IntegerField()
     winner = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
-        return f"Match {self.match_id}"
+        return f"Match {self.MatchID}"
 
 
 class MatchEvent(models.Model):
-    match_event_id = models.AutoField(primary_key=True)
+    MatchEventID = models.AutoField(primary_key=True)
     match = models.ForeignKey(MatchData, on_delete=models.CASCADE)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     event_type = models.CharField(max_length=50)
@@ -71,35 +71,35 @@ class MatchEvent(models.Model):
     fantasy_points = models.IntegerField()
 
     def __str__(self):
-        return f"Event {self.match_event_id}"
+        return f"Event {self.MatchEventID}"
 
 
 class PlayerStats(models.Model):
-    player_stats_id = models.AutoField(primary_key=True)
+    PlayerStatsID = models.AutoField(primary_key=True)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     game_date = models.DateField()
     performance_stats = models.TextField()
     injury_status = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
-        return f"Stats {self.player_stats_id}"
+        return f"Stats {self.PlayerStatsID}"
 
 
 class Trade(models.Model):
-    trade_id = models.AutoField(primary_key=True)
+    TradeID = models.AutoField(primary_key=True)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     trade_date = models.DateField()
     teams_involved = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"Trade {self.trade_id}"
+        return f"Trade {self.TradeID}"
 
 
 class Waiver(models.Model):
-    waiver_id = models.AutoField(primary_key=True)
+    WaiverID = models.AutoField(primary_key=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     waiver_status = models.CharField(max_length=50)
     waiver_pickup_date = models.DateField()
 
     def __str__(self):
-        return f"Waiver {self.waiver_id}"
+        return f"Waiver {self.WaiverID}"
