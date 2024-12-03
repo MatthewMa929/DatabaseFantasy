@@ -61,12 +61,6 @@
             <div id="fields-container"></div>
 
             <button type="submit">Submit</button>
-
-            <form method="post" action="{% url 'update_rankings' %}">
-                {% csrf_token %}
-                <button type="submit">Update Rankings</button>
-            </form>
-            
         </form>
     </div>
     <footer>
@@ -123,12 +117,11 @@
                     <input type="number" id="total_points_scored" name="total_points_scored">
                 </div>
                 <div class="form-group">
-                    <label for="ranking">Ranking:</label>
-                    <input type="number" id="ranking" name="ranking">
-                </div>
-                <div class="form-group">
                     <label for="status">Status:</label>
-                    <input type="text" id="status" name="status">
+                    <select id="status" name="status">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
                 </div>
             `,
             league: `

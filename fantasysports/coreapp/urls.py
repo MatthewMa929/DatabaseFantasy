@@ -18,4 +18,5 @@ urlpatterns = [
     path('manage/', views.manage_view, name='manage'),
     path('activity/', views.activity_view, name='activity'),
     path('teams/', views.teams_view, name='teams'),
+
 ]
