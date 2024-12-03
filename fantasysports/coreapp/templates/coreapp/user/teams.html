@@ -13,6 +13,7 @@
                 <li><a href="/">Home</a></li>
                 <li><a href="/search">Search</a></li>
                 <li><a href="/manage">Manage</a></li>
+                <li><a href="/teams">Teams</a></li>
                 <li><a href="/activity">Activity</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
@@ -75,8 +76,8 @@
                 </div>
 
                 <div class="form-group" id="record-id-group" style="display: none;">
-                    <label for="record-id">Team ID:</label>
-                    <input type="number" id="record-id" name="record_id" placeholder="Enter Team ID">
+                    <label for="team_id">Team ID:</label>
+                    <input type="number" id="team_id" name="team_id" placeholder="Enter Team ID">
                 </div>
 
                 <div id="fields-container">
@@ -85,12 +86,16 @@
                         <input type="text" id="team_name" name="team_name">
                     </div>
                     <div class="form-group">
-                        <label for="league">League:</label>
-                        <input type="text" id="league" name="league">
+                        <label for="league_id">League ID:</label>
+                        <input type="number" id="league_id" name="league_id">
                     </div>
                     <div class="form-group">
                         <label for="total_points_scored">Total Points Scored:</label>
                         <input type="number" id="total_points_scored" name="total_points_scored">
+                    </div>
+                    <div class="form-group">
+                        <label for="ranking">Ranking:</label>
+                        <input type="number" id="ranking" name="ranking">
                     </div>
                     <div class="form-group">
                         <label for="status">Status:</label>
@@ -132,4 +137,3 @@
     </script>
 </body>
 </html>
-

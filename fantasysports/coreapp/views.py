@@ -25,7 +25,68 @@ def home(request):
         return query(request)
     else:
         return render(request, 'coreapp/home.html')
-    
+
+@csrf_protect
+@login_required
+def teams_view(request):
+    if request.method == 'POST':
+        operation = request.POST.get('operation')
+        record_id = request.POST.get('team_id')
+        league_id = request.POST.get('league_id')
+        team_name = request.POST.get('team_name')
+        total_points_scored = request.POST.get('total_points_scored')
+        ranking = request.POST.get('ranking')
+        status = request.POST.get('status')
+
+        try:
+            with connection.cursor() as cursor:
+                if operation == 'create':
+                    # Validate input parameters
+                    if not (league_id and team_name and total_points_scored and ranking and status):
+                        messages.error(request, "All fields are required for creating a team.")
+                        return render(request, 'coreapp/user/teams.html')
+
+                    # Create a new team
+                    cursor.execute("""
+                        INSERT INTO team (league_id, team_name, total_points_scored, ranking, status)
+                        VALUES (%s, %s, %s, %s, %s)
+                    """, [league_id, team_name, total_points_scored, ranking, status])
+                    messages.success(request, f"Team '{team_name}' created successfully.")
+
+                elif operation == 'update':
+                    # Validate input parameters
+                    if not (record_id and league_id and team_name and total_points_scored and ranking and status):
+                        messages.error(request, "All fields and a valid Team ID are required for updating a team.")
+                        return render(request, 'coreapp/user/teams.html')
+
+                    # Update an existing team
+                    cursor.execute("""
+                        UPDATE team
+                        SET league_id = %s, team_name = %s, total_points_scored = %s, ranking = %s, status = %s
+                        WHERE team_id = %s
+                    """, [league_id, team_name, total_points_scored, ranking, status, record_id])
+                    messages.success(request, f"Team with ID {record_id} updated successfully.")
+
+                elif operation == 'delete':
+                    # Validate Team ID
+                    if not record_id:
+                        messages.error(request, "Team ID is required for deletion.")
+                        return render(request, 'coreapp/user/teams.html')
+
+                    # Delete an existing team
+                    cursor.execute("DELETE FROM team WHERE team_id = %s", [record_id])
+                    messages.success(request, f"Team with ID {record_id} deleted successfully.")
+
+                else:
+                    messages.error(request, "Invalid operation type selected.")
+
+        except Exception as e:
+            logger.error(f"Error in teams_view: {str(e)}")
+            messages.error(request, f"An error occurred: {str(e)}")
+
+    return render(request, 'coreapp/user/teams.html')
+
+
 @csrf_exempt
 @login_required
 def edit_record(request):

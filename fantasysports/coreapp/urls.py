@@ -16,5 +16,6 @@ urlpatterns = [
     path('delete-record/', views.delete_record, name='delete_record'),
     path('perform-search/', views.perform_search, name='perform_search'),
     path('manage/', views.manage_view, name='manage'),
-    path('activity/', views.activity_view, name='activity')
+    path('activity/', views.activity_view, name='activity'),
+    path('teams/', views.teams_view, name='teams'),
 ]
