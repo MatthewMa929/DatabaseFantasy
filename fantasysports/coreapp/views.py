@@ -28,6 +28,7 @@ def home(request):
     else:
         return render(request, 'coreapp/home.html')
     
+    
 @csrf_protect
 @login_required
 def teams_view(request):
@@ -91,6 +92,70 @@ def teams_view(request):
         teams = []
 
     return render(request, 'coreapp/user/teams.html', {'teams': teams})
+
+
+@csrf_protect
+@login_required
+def players_view(request):
+    if request.method == 'POST':
+        operation = request.POST.get('operation')
+        player_id = request.POST.get('player_id')  # Updated to fetch player ID
+        fantasy_team = request.POST.get('fantasy_team')  # Player's fantasy team
+
+        try:
+            with connection.cursor() as cursor:
+                if operation == 'update':
+                    if not player_id:
+                        messages.error(request, "Player ID is required for update.")
+                    elif not fantasy_team:
+                        messages.error(request, "Fantasy Team name is required for update.")
+                    else:
+                        cursor.execute("""
+                            UPDATE player
+                            SET fantasy_team = %s
+                            WHERE player_id = %s
+                        """, [fantasy_team, player_id])
+                        messages.success(request, f"Player with ID {player_id} updated successfully.")
+                else:
+                    messages.error(request, "Invalid operation type selected.")
+
+                # Update rankings if applicable
+                cursor.execute("SELECT updateRankings();")
+                messages.success(request, "Rankings updated successfully.")
+
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+
+    try:
+        # Fetch all players for the table display
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT player_id, full_name, fantasy_team
+                FROM player
+                ORDER BY player_id ASC
+            """)
+            players = cursor.fetchall()
+    except Exception as e:
+        messages.error(request, f"An error occurred while fetching players: {str(e)}")
+        players = []
+
+    try:
+        # Fetch all teams for the table display
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT team_id, team_name, league_id, total_points_scored, ranking, status, user_id
+                FROM team
+                ORDER BY ranking ASC
+            """)
+            teams = cursor.fetchall()
+    except Exception as e:
+        messages.error(request, f"An error occurred while fetching teams: {str(e)}")
+        teams = []
+
+    return render(request, 'coreapp/user/players_teams.html', {
+        'players': players,
+        'teams': teams
+    })
 
 
 
