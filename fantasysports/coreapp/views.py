@@ -74,14 +74,88 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def manage_view(request):
     if request.method == 'POST':
-        operation = request.POST.get('operation')
-        record_id = request.POST.get('record_id')
+        #Change this to fit whatever the dropdown bar value is
+        # Draft table
+        draft_id = request.POST.get('DraftID')
+        league_id = request.POST.get('LeagueID')
+        player_id = request.POST.get('PlayerID')
+        draft_date = request.POST.get('draft_date')
+        draft_order = request.POST.get('draft_order')
+        draft_status = request.POST.get('draft_status')
+
+        # League table
+        league_id = request.POST.get('LeagueID')
+        user_id = request.POST.get('UserID')
+        league_name = request.POST.get('league_name')
+        league_type = request.POST.get('league_type')
+        draft_date = request.POST.get('draft_date')
+        max_teams = request.POST.get('max_teams')
+
+        # Match data table
+        match_id = request.POST.get('MatchID')
+        team_id = request.POST.get('TeamID')
+        match_date = request.POST.get('match_date')
+        final_score = request.POST.get('final_score')
+        winner = request.POST.get('winner')
+
+        # Match event table
+        match_event_id = request.POST.get('MatchEventID')
+        match_id = request.POST.get('MatchID')
+        player_id = request.POST.get('PlayerID')
+        event_type = request.POST.get('event_type')
+        event_time = request.POST.get('event_time')
+        fantasy_points = request.POST.get('fantasy_points')
+
+        # Match team table
+        match_team_id = request.POST.get('MatchTeamID')
+        match_id = request.POST.get('MatchID')
+        team_id = request.POST.get('TeamID')
+
+        # Player table
+        player_id = request.POST.get('PlayerID')
         full_name = request.POST.get('full_name')
         sport = request.POST.get('sport')
         real_team = request.POST.get('real_team')
         position = request.POST.get('position')
         fantasy_points = request.POST.get('fantasy_points')
         availability_status = request.POST.get('availability_status')
+
+        # Player stats table
+        player_stats_id = request.POST.get('PlayerStatsID')
+        player_id = request.POST.get('PlayerID')
+        game_date = request.POST.get('game_date')
+        performance_stats = request.POST.get('performance_stats')
+        injury_status = request.POST.get('injury_status')
+
+        # Team table
+        team_id = request.POST.get('TeamID')
+        league_id = request.POST.get('LeagueID')
+        user_id = request.POST.get('UserID')
+        team_name = request.POST.get('team_name')
+        total_points_scored = request.POST.get('total_points_scored')
+        ranking = request.POST.get('ranking')
+        status = request.POST.get('status')
+
+        # Trade table
+        trade_id = request.POST.get('TradeID')
+        player_id = request.POST.get('PlayerID')
+        trade_date = request.POST.get('trade_date')
+        teams_involved = request.POST.get('teams_involved')
+
+        # User data table
+        user_id = request.POST.get('UserID')
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        profile_settings = request.POST.get('profile_settings')
+
+        # Waiver table
+        waiver_id = request.POST.get('WaiverID')
+        team_id = request.POST.get('TeamID')
+        waiver_status = request.POST.get('waiver_status')
+        waiver_pickup_date = request.POST.get('waiver_pickup_date')
+
 
         try:
             with connection.cursor() as cursor:
