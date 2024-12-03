@@ -62,35 +62,96 @@ def edit_record(request):
     except Exception as e:
         return JsonResponse({'success': False, 'error': 'An error occurred: ' + str(e)}, status=400)
 
+from django.db import connection
+from django.http import JsonResponse
+from django.contrib import messages
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.contrib.auth.decorators import login_required
+
 @csrf_protect
 @login_required
 def manage_view(request):
-    """
-    A view for managing records, such as creating, editing, or deleting records.
-    """
-    has_write_access = check_write_access(request)
-    return render(request, 'coreapp/manage.html', {'has_write_access': has_write_access})
+    if request.method == 'POST':
+        operation = request.POST.get('operation')
+        record_id = request.POST.get('record_id')
+        full_name = request.POST.get('full_name')
+        sport = request.POST.get('sport')
+        real_team = request.POST.get('real_team')
+        position = request.POST.get('position')
+        fantasy_points = request.POST.get('fantasy_points')
+        availability_status = request.POST.get('availability_status')
+
+        try:
+            with connection.cursor() as cursor:
+                if operation == 'create':
+                    # Create a new player
+                    cursor.execute("""
+                        INSERT INTO player (full_name, sport, real_team, position, fantasy_points, availability_status)
+                        VALUES (%s, %s, %s, %s, %s, %s)
+                    """, [full_name, sport, real_team, position, fantasy_points, availability_status])
+                    messages.success(request, f"Player '{full_name}' created successfully.")
+
+                elif operation == 'update':
+                    # Update an existing player
+                    if not record_id:
+                        messages.error(request, "Record ID is required for update.")
+                    else:
+                        cursor.execute("""
+                            UPDATE player
+                            SET full_name = %s, sport = %s, real_team = %s, position = %s, fantasy_points = %s, availability_status = %s
+                            WHERE player_id = %s
+                        """, [full_name, sport, real_team, position, fantasy_points, availability_status, record_id])
+                        messages.success(request, f"Player with ID {record_id} updated successfully.")
+
+                elif operation == 'delete':
+                    # Delete an existing player
+                    if not record_id:
+                        messages.error(request, "Record ID is required for delete.")
+                    else:
+                        cursor.execute("DELETE FROM player WHERE player_id = %s", [record_id])
+                        messages.success(request, f"Player with ID {record_id} deleted successfully.")
+
+                else:
+                    messages.error(request, "Invalid operation type selected.")
+
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+
+    return render(request, 'coreapp/manage.html')
+
 
 
 @csrf_protect
 @login_required
 def activity_view(request):
-    """
-    A view to display recent activity or logs related to the application.
-    """
+    data = {}
     try:
         with connection.cursor() as cursor:
+            # Fetch table names excluding coreapp_ prefixed tables
             cursor.execute("""
-                SELECT * FROM activity_log
-                ORDER BY timestamp DESC
-                LIMIT 50
-            """)  # Adjust query based on your schema
-            activity_logs = cursor.fetchall()
-    except Exception as e:
-        activity_logs = []
-        messages.error(request, f"Error fetching activity logs: {str(e)}")
+                SELECT table_name
+                FROM information_schema.tables
+                WHERE table_schema = 'fantasy_sports'
+                AND table_name NOT LIKE 'coreapp_%'
+            """)
+            tables = cursor.fetchall()
 
-    return render(request, 'coreapp/activity.html', {'activity_logs': activity_logs})
+            for table_name in tables:
+                cursor.execute(f"SELECT * FROM {table_name[0]} LIMIT 10")
+                rows = cursor.fetchall()
+                columns = [col[0] for col in cursor.description]
+                if rows:
+                    data[table_name[0]] = {'columns': columns, 'rows': rows}
+                else:
+                    data[table_name[0]] = {'columns': columns, 'rows': 'No data found in this table.'}
+
+    except Exception as e:
+        data['error'] = f"Error fetching data: {str(e)}"
+
+    return render(request, 'coreapp/activity.html', {'tables': data})
+
+
 
 @csrf_exempt
 @login_required

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Activity - Fantasy Sports Data Repository</title>
+    <title>Database Overview - Fantasy Sports Data Repository</title>
     <link rel="stylesheet" href="{% static 'coreapp/activity.css' %}" />
   </head>
   <body>
@@ -19,38 +19,40 @@
       </nav>
     </header>
     <div class="container">
-      <h1>User Activity</h1>
-      <div id="results-container">
-        {% if activity_logs %}
-        <table>
-          <thead>
-            <tr>
-              <th>Activity ID</th>
-              <th>User ID</th>
-              <th>Activity Description</th>
-              <th>Activity Timestamp</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for log in activity_logs %}
-            <tr>
-              <td>{{ log.activity_id }}</td>
-              <td>{{ log.user_id }}</td>
-              <td>{{ log.activity_description }}</td>
-              <td>{{ log.activity_timestamp }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        {% else %}
-        <p>No activity logs found.</p>
-        {% endif %}
+      <h1>Database Tables</h1>
+      {% for table_name, table_data in tables.items %}
+      <div class="table-container">
+          <h2>{{ table_name }}</h2>
+          {% if table_data.rows == "No data found in this table." %}
+          <p>No data found in this table.</p>
+          {% else %}
+          <table>
+              <thead>
+                  <tr>
+                      {% for column in table_data.columns %}
+                      <th>{{ column }}</th>
+                      {% endfor %}
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for row in table_data.rows %}
+                  <tr>
+                      {% for value in row %}
+                      <td>{{ value }}</td>
+                      {% endfor %}
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+          {% endif %}
       </div>
+      {% endfor %}
+  </div>
+  
     </div>
 
     <footer>
-      <p>2024 NYU School of Engineering</p>
+      <p>2024 Fantasy Sports Platform</p>
     </footer>
-    <script src="{% static 'coreapp/activity.js' %}"></script>
   </body>
 </html>
