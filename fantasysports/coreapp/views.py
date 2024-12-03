@@ -22,7 +22,108 @@ def home(request):
     else:
         return render(request, 'coreapp/home.html')
     
+@csrf_exempt
+@login_required
+def edit_record(request):
+    """
+    Updates an existing record in the database.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=400)
 
+    data = json.loads(request.body)
+    table = data.get('table')
+    record_id = data.get('id')  # The unique identifier for the record
+    updates = data.get('updates')  # Dictionary of fields to update
+
+    query_dict = {
+        'player': "UPDATE player SET {updates} WHERE player_id = %s",
+        'team': "UPDATE team SET {updates} WHERE team_id = %s",
+        'league': "UPDATE league SET {updates} WHERE league_id = %s",
+        'match_data': "UPDATE match_data SET {updates} WHERE match_id = %s",
+    }
+
+    try:
+        query = query_dict.get(table)
+        if not query:
+            return JsonResponse({'success': False, 'error': 'Invalid table selected.'}, status=400)
+
+        # Dynamically create the SET clause and parameters
+        set_clause = ', '.join([f"{key} = %s" for key in updates.keys()])
+        values = list(updates.values())
+        values.append(record_id)  # Add record_id as the last parameter
+        query = query.replace("{updates}", set_clause)
+
+        with connection.cursor() as cursor:
+            cursor.execute(query, values)
+
+        return JsonResponse({'success': True, 'message': 'Record updated successfully.'})
+
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': 'An error occurred: ' + str(e)}, status=400)
+
+@csrf_protect
+@login_required
+def manage_view(request):
+    """
+    A view for managing records, such as creating, editing, or deleting records.
+    """
+    has_write_access = check_write_access(request)
+    return render(request, 'coreapp/manage.html', {'has_write_access': has_write_access})
+
+
+@csrf_protect
+@login_required
+def activity_view(request):
+    """
+    A view to display recent activity or logs related to the application.
+    """
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT * FROM activity_log
+                ORDER BY timestamp DESC
+                LIMIT 50
+            """)  # Adjust query based on your schema
+            activity_logs = cursor.fetchall()
+    except Exception as e:
+        activity_logs = []
+        messages.error(request, f"Error fetching activity logs: {str(e)}")
+
+    return render(request, 'coreapp/activity.html', {'activity_logs': activity_logs})
+
+@csrf_exempt
+@login_required
+def delete_record(request):
+    """
+    Deletes an existing record from the database.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=400)
+
+    data = json.loads(request.body)
+    table = data.get('table')
+    record_id = data.get('id')  # The unique identifier for the record
+
+    query_dict = {
+        'player': "DELETE FROM player WHERE player_id = %s",
+        'team': "DELETE FROM team WHERE team_id = %s",
+        'league': "DELETE FROM league WHERE league_id = %s",
+        'match_data': "DELETE FROM match_data WHERE match_id = %s",
+    }
+
+    try:
+        query = query_dict.get(table)
+        if not query:
+            return JsonResponse({'success': False, 'error': 'Invalid table selected.'}, status=400)
+
+        with connection.cursor() as cursor:
+            cursor.execute(query, [record_id])
+
+        return JsonResponse({'success': True, 'message': 'Record deleted successfully.'})
+
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': 'An error occurred: ' + str(e)}, status=400)
 
 @csrf_protect
 @login_required

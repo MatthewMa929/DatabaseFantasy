@@ -1,0 +1,112 @@
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Player - Fantasy Sports Data Repository</title>
+    <link rel="stylesheet" href="{% static 'coreapp/manage.css' %}">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/search">Search</a></li>
+                <li><a href="/manage">Manage</a></li>
+                <li><a href="/activity">Activity</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Manage Player</h1>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form id="manage-form" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="operation">Select Operation:</label>
+                <div id="operation-options">
+                    <input type="radio" id="create" name="operation" value="create" checked>
+                    <label for="create">Create</label>
+                    <input type="radio" id="update" name="operation" value="update">
+                    <label for="update">Update</label>
+                    <input type="radio" id="delete" name="operation" value="delete">
+                    <label for="delete">Delete</label>
+                </div>
+            </div>
+
+            <div class="form-group" id="record-id-group" style="display: none;">
+                <label for="record-id">Record ID:</label>
+                <input type="number" id="record-id" name="record_id" placeholder="Enter record ID">
+            </div>
+
+            <div id="fields-container">
+                <div class="form-group">
+                    <label for="full_name">Full Name:</label>
+                    <input type="text" id="full_name" name="full_name">
+                </div>
+                <div class="form-group">
+                    <label for="sport">Sport:</label>
+                    <input type="text" id="sport" name="sport">
+                </div>
+                <div class="form-group">
+                    <label for="real_team">Real Team:</label>
+                    <input type="text" id="real_team" name="real_team">
+                </div>
+                <div class="form-group">
+                    <label for="position">Position:</label>
+                    <input type="text" id="position" name="position">
+                </div>
+                <div class="form-group">
+                    <label for="fantasy_points">Fantasy Points:</label>
+                    <input type="number" id="fantasy_points" name="fantasy_points">
+                </div>
+                <div class="form-group">
+                    <label for="availability_status">Availability Status:</label>
+                    <select id="availability_status" name="availability_status">
+                        <option value="Available">Available</option>
+                        <option value="Injured">Injured</option>
+                        <option value="Retired">Retired</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <footer>
+        <p>2024 Fantasy Sports Platform</p>
+    </footer>
+
+    <script>
+        // Handle operation type change
+        const operationOptions = document.getElementsByName('operation');
+        const recordIdGroup = document.getElementById('record-id-group');
+        const fieldsContainer = document.getElementById('fields-container');
+
+        operationOptions.forEach(option => {
+            option.addEventListener('change', function () {
+                if (this.value === 'delete') {
+                    fieldsContainer.style.display = 'none';
+                    recordIdGroup.style.display = 'block';
+                } else if (this.value === 'update') {
+                    fieldsContainer.style.display = 'block';
+                    recordIdGroup.style.display = 'block';
+                } else {
+                    fieldsContainer.style.display = 'block';
+                    recordIdGroup.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
