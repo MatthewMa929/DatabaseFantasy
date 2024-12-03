@@ -33,8 +33,6 @@ def edit_record(request):
     Updates an existing record in the database.
     """
     
-    if not is_admin(request.user):
-        return HttpResponseForbidden("You do not have permission to edit records.")
 
     if request.method != 'POST':
         return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=400)
@@ -46,10 +44,10 @@ def edit_record(request):
     updates = data.get('updates')  # Dictionary of fields to update
 
     query_dict = {
-        'player': "UPDATE player SET {updates} WHERE PlayerID = %s",
-        'team': "UPDATE team SET {updates} WHERE TeamID = %s",
-        'league': "UPDATE league SET {updates} WHERE LeagueID = %s",
-        'match_data': "UPDATE match_data SET {updates} WHERE MatchID = %s",
+        'player': "UPDATE player SET {updates} WHERE player_id = %s",
+        'team': "UPDATE team SET {updates} WHERE team_id = %s",
+        'league': "UPDATE league SET {updates} WHERE league_id = %s",
+        'match_data': "UPDATE match_data SET {updates} WHERE match_id = %s",
     }
 
     try:
@@ -82,7 +80,6 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def manage_view(request):
     if not is_admin(request.user):
-        messages.error(request, "You do not have permission to manage records.")
         return redirect('home')
     
     if request.method == 'POST':
@@ -91,14 +88,14 @@ def manage_view(request):
         # #Change this to fit whatever the dropdown bar value is
         # # Draft table
         # draft_id = request.POST.get('DraftID')
-        # league_id = request.POST.get('LeagueID')
-        # player_id = request.POST.get('PlayerID')
+        # league_id = request.POST.get('league_id')
+        # player_id = request.POST.get('player_id')
         # draft_date = request.POST.get('draft_date')
         # draft_order = request.POST.get('draft_order')
         # draft_status = request.POST.get('draft_status')
 
         # # League table
-        # league_id = request.POST.get('LeagueID')
+        # league_id = request.POST.get('league_id')
         # user_id = request.POST.get('UserID')
         # league_name = request.POST.get('league_name')
         # league_type = request.POST.get('league_type')
@@ -106,24 +103,24 @@ def manage_view(request):
         # max_teams = request.POST.get('max_teams')
 
         # # Match data table
-        # match_id = request.POST.get('MatchID')
-        # team_id = request.POST.get('TeamID')
+        # match_id = request.POST.get('match_id')
+        # team_id = request.POST.get('team_id')
         # match_date = request.POST.get('match_date')
         # final_score = request.POST.get('final_score')
         # winner = request.POST.get('winner')
 
         # # Match event table
         # match_event_id = request.POST.get('MatchEventID')
-        # match_id = request.POST.get('MatchID')
-        # player_id = request.POST.get('PlayerID')
+        # match_id = request.POST.get('match_id')
+        # player_id = request.POST.get('player_id')
         # event_type = request.POST.get('event_type')
         # event_time = request.POST.get('event_time')
         # fantasy_points = request.POST.get('fantasy_points')
 
         # # Match team table
-        # match_team_id = request.POST.get('MatchTeamID')
-        # match_id = request.POST.get('MatchID')
-        # team_id = request.POST.get('TeamID')
+        # match_team_id = request.POST.get('Matchteam_id')
+        # match_id = request.POST.get('match_id')
+        # team_id = request.POST.get('team_id')
 
         # Player table
         record_id = request.POST.get('record_id')
@@ -136,14 +133,14 @@ def manage_view(request):
 
         # # Player stats table
         # player_stats_id = request.POST.get('PlayerStatsID')
-        # player_id = request.POST.get('PlayerID')
+        # player_id = request.POST.get('player_id')
         # game_date = request.POST.get('game_date')
         # performance_stats = request.POST.get('performance_stats')
         # injury_status = request.POST.get('injury_status')
 
         # # Team table
-        # team_id = request.POST.get('TeamID')
-        # league_id = request.POST.get('LeagueID')
+        # team_id = request.POST.get('team_id')
+        # league_id = request.POST.get('league_id')
         # user_id = request.POST.get('UserID')
         # team_name = request.POST.get('team_name')
         # total_points_scored = request.POST.get('total_points_scored')
@@ -152,7 +149,7 @@ def manage_view(request):
 
         # # Trade table
         # trade_id = request.POST.get('TradeID')
-        # player_id = request.POST.get('PlayerID')
+        # player_id = request.POST.get('player_id')
         # trade_date = request.POST.get('trade_date')
         # teams_involved = request.POST.get('teams_involved')
 
@@ -166,7 +163,7 @@ def manage_view(request):
 
         # # Waiver table
         # waiver_id = request.POST.get('WaiverID')
-        # team_id = request.POST.get('TeamID')
+        # team_id = request.POST.get('team_id')
         # waiver_status = request.POST.get('waiver_status')
         # waiver_pickup_date = request.POST.get('waiver_pickup_date')
 
@@ -189,7 +186,7 @@ def manage_view(request):
                         cursor.execute("""
                             UPDATE player
                             SET full_name = %s, sport = %s, real_team = %s, position = %s, fantasy_points = %s, availability_status = %s
-                            WHERE PlayerID = %s
+                            WHERE player_id = %s
                         """, [full_name, sport, real_team, position, fantasy_points, availability_status, record_id])
                         messages.success(request, f"Player with ID {record_id} updated successfully.")
 
@@ -198,7 +195,7 @@ def manage_view(request):
                     if not record_id:
                         messages.error(request, "Record ID is required for delete.")
                     else:
-                        cursor.execute("DELETE FROM player WHERE PlayerID = %s", [record_id])
+                        cursor.execute("DELETE FROM player WHERE player_id = %s", [record_id])
                         messages.success(request, f"Player with ID {record_id} deleted successfully.")
 
                 else:
@@ -218,16 +215,25 @@ def activity_view(request):
     try:
         with connection.cursor() as cursor:
             # Fetch table names excluding coreapp_ prefixed tables
-            cursor.execute("""
-                SELECT table_name
-                FROM information_schema.tables
-                WHERE table_schema = 'fantasy_sports'
-                AND table_name NOT LIKE 'coreapp_%'
-            """)
+            if not is_admin(request.user):
+                cursor.execute("""
+                    SELECT table_name
+                    FROM information_schema.tables
+                    WHERE table_schema = 'fantasy_sports'
+                    AND table_name NOT LIKE 'coreapp_%'
+                    AND table_name != 'user_data'
+                """)
+            else:
+                cursor.execute("""
+                    SELECT table_name
+                    FROM information_schema.tables
+                    WHERE table_schema = 'fantasy_sports'
+                    AND table_name NOT LIKE 'coreapp_%'
+                """)
             tables = cursor.fetchall()
 
             for table_name in tables:
-                cursor.execute(f"SELECT * FROM {table_name[0]} LIMIT 10")
+                cursor.execute(f"SELECT * FROM {table_name[0]}")
                 rows = cursor.fetchall()
                 columns = [col[0] for col in cursor.description]
                 if rows:
@@ -256,10 +262,10 @@ def delete_record(request):
     record_id = data.get('id')  # The unique identifier for the record
 
     query_dict = {
-        'player': "DELETE FROM player WHERE PlayerID = %s",
-        'team': "DELETE FROM team WHERE TeamID = %s",
-        'league': "DELETE FROM league WHERE LeagueID = %s",
-        'match_data': "DELETE FROM match_data WHERE MatchID = %s",
+        'player': "DELETE FROM player WHERE player_id = %s",
+        'team': "DELETE FROM team WHERE team_id = %s",
+        'league': "DELETE FROM league WHERE league_id = %s",
+        'match_data': "DELETE FROM match_data WHERE match_id = %s",
     }
 
     try:
@@ -454,7 +460,7 @@ def perform_search(request):
         'player': "SELECT full_name, sport, real_team, position, fantasy_points, availability_status FROM player WHERE full_name ILIKE %s",
         'team': "SELECT team_name, total_points_scored, ranking, status FROM team WHERE team_name ILIKE %s",
         'league': "SELECT league_name, league_type, draft_date, max_teams FROM league WHERE league_name ILIKE %s",
-        'match_data': "SELECT match_date, final_score, winner FROM match_data WHERE TeamID IN (SELECT TeamID FROM team WHERE team_name ILIKE %s",
+        'match_data': "SELECT match_date, final_score, winner FROM match_data WHERE team_id IN (SELECT team_id FROM team WHERE team_name ILIKE %s",
     }
 
     try:
@@ -486,10 +492,10 @@ def edit_record(request):
     updates = data.get('updates')  # Dictionary of fields to update
 
     query_dict = {
-        'player': "UPDATE player SET {updates} WHERE PlayerID = %s",
-        'team': "UPDATE team SET {updates} WHERE TeamID = %s",
-        'league': "UPDATE league SET {updates} WHERE LeagueID = %s",
-        'match_data': "UPDATE match_data SET {updates} WHERE MatchID = %s",
+        'player': "UPDATE player SET {updates} WHERE player_id = %s",
+        'team': "UPDATE team SET {updates} WHERE team_id = %s",
+        'league': "UPDATE league SET {updates} WHERE league_id = %s",
+        'match_data': "UPDATE match_data SET {updates} WHERE match_id = %s",
     }
 
     try:
