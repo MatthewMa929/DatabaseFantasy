@@ -10,18 +10,19 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from .forms import UserRegisterForm
 from django.db import connection
+import logging
 
-def check_write_access(request):
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT EXISTS(SELECT 1 FROM user_data WHERE user_id = %s AND profile_settings = 'write_access')", [request.user.id])
-        has_write_access = cursor.fetchone()[0]
-    return has_write_access
+logger = logging.getLogger(__name__)
+
+
 
 def home(request):
     if request.user.is_authenticated:
         return query(request)
     else:
         return render(request, 'coreapp/home.html')
+    
+
 
 @csrf_protect
 @login_required
@@ -50,35 +51,56 @@ def user_login(request):
             messages.error(request, 'Invalid email or password')
     return render(request, 'coreapp/user/login.html')
 
+def check_write_access(request):
+    """Checks if the user has write access based on their privileges in the database."""
+    if not request.user.is_authenticated or not request.user.id:
+        return False
+
+    try:
+        with connection.cursor() as cursor:
+            # Check if the user has INSERT privileges on the 'player' table
+            cursor.execute(
+                "SELECT has_table_privilege(%s, 'player', 'INSERT')", 
+                [request.user.username]
+            )
+            has_write_access = cursor.fetchone()
+            return has_write_access[0] if has_write_access else False
+    except Exception as e:
+        logger.error(f"Error checking write access: {e}")
+        return False
+
+
 def user_register(request):
+    """Handles user registration and assigns roles based on email."""
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password1')
-            
+
             try:
                 with transaction.atomic():
                     if User.objects.filter(username=username).exists():
                         form.add_error('email', 'Email already in use. Please choose a different one.')
                     else:
                         user = form.save()
-                        role = 'read_only'
+                        # Assign role based on email domain
+                        role = 'admin' if '@admin.com' in username else 'read_only'
 
                         with connection.cursor() as cursor:
-                            cursor.execute('CREATE USER "%s" WITH PASSWORD \'%s\'' % (username, password))
-                            cursor.execute('GRANT %s TO "%s"' % (role, username))
+                            cursor.execute(f"CREATE USER \"{username}\" WITH PASSWORD %s", [password])
+                            cursor.execute(f"GRANT {role} TO \"{username}\"")
+                            if role == 'admin':
+                                cursor.execute(f"GRANT INSERT ON ALL TABLES IN SCHEMA fantasy_sports TO \"{username}\"")
                         login(request, user)
                         return redirect(reverse('query'))
 
             except IntegrityError:
                 form.add_error('email', 'This username is already taken. Please try again.')
-
     else:
         form = UserRegisterForm()
 
     return render(request, 'coreapp/user/register.html', {'form': form})
-
 
 @login_required
 def query(request):
@@ -139,24 +161,34 @@ def create_view(request):
     if not check_write_access(request):
         messages.error(request, 'You do not have write access.')
         return redirect('home')
-    
+
     if request.method == 'POST':
-        table = request.POST.get('table')
-        fields = request.POST.dict()
-        fields.pop('csrfmiddlewaretoken', None)
-        fields.pop('table', None)
-        placeholders = ', '.join(['%s'] * len(fields))
-        columns = ', '.join(fields.keys())
-        values = tuple(fields.values())
-        
+        # Extract player data from POST request
+        full_name = request.POST.get('full_name')
+        sport = request.POST.get('sport')
+        real_team = request.POST.get('real_team')
+        position = request.POST.get('position')
+        fantasy_points = request.POST.get('fantasy_points')
+        availability_status = request.POST.get('availability_status')
+
+        logger.info(f"Received player data: {full_name}, {sport}, {real_team}, {position}, {fantasy_points}, {availability_status}")
+
         try:
+            # Insert the player into the database
             with connection.cursor() as cursor:
-                cursor.execute(f"INSERT INTO {table} ({columns}) VALUES ({placeholders})", values)
-            messages.success(request, 'Record created successfully.')
+                cursor.execute("""
+                    INSERT INTO player (full_name, sport, real_team, position, fantasy_points, availability_status)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                """, [full_name, sport, real_team, position, fantasy_points, availability_status])
+
+            messages.success(request, f"Player '{full_name}' created successfully.")
         except Exception as e:
-            messages.error(request, f'Error creating record: {str(e)}')
+            logger.error(f"Error creating player: {str(e)}")
+            messages.error(request, f"Error creating player: {str(e)}")
 
     return render(request, 'coreapp/create.html')
+
+
 
 @csrf_exempt
 @login_required
@@ -187,6 +219,43 @@ def perform_search(request):
             results = [dict(zip(columns, row)) for row in rows]
 
         return JsonResponse({'success': True, 'results': results})
+
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': 'An error occurred: ' + str(e)}, status=400)
+
+@csrf_exempt
+@login_required
+def edit_record(request):
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=400)
+
+    data = json.loads(request.body)
+    table = data.get('table')
+    record_id = data.get('id')  # The unique identifier for the record
+    updates = data.get('updates')  # Dictionary of fields to update
+
+    query_dict = {
+        'player': "UPDATE player SET {updates} WHERE player_id = %s",
+        'team': "UPDATE team SET {updates} WHERE team_id = %s",
+        'league': "UPDATE league SET {updates} WHERE league_id = %s",
+        'match_data': "UPDATE match_data SET {updates} WHERE match_id = %s",
+    }
+
+    try:
+        query = query_dict.get(table)
+        if not query:
+            return JsonResponse({'success': False, 'error': 'Invalid table selected.'}, status=400)
+
+        # Dynamically create the SET clause and parameters
+        set_clause = ', '.join([f"{key} = %s" for key in updates.keys()])
+        values = list(updates.values())
+        values.append(record_id)  # Add record_id as the last parameter
+        query = query.replace("{updates}", set_clause)
+
+        with connection.cursor() as cursor:
+            cursor.execute(query, values)
+
+        return JsonResponse({'success': True, 'message': 'Record updated successfully.'})
 
     except Exception as e:
         return JsonResponse({'success': False, 'error': 'An error occurred: ' + str(e)}, status=400)
