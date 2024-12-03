@@ -11,6 +11,7 @@ from django.urls import reverse
 from .forms import UserRegisterForm
 from django.db import connection
 import logging
+from django.views.decorators.cache import never_cache
 
 logger = logging.getLogger(__name__)
 
@@ -121,7 +122,7 @@ def manage_view(request):
     return render(request, 'coreapp/manage.html')
 
 
-
+@never_cache
 @csrf_protect
 @login_required
 def activity_view(request):
