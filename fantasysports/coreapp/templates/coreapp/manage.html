@@ -61,6 +61,12 @@
             <div id="fields-container"></div>
 
             <button type="submit">Submit</button>
+
+            <form method="post" action="{% url 'update_rankings' %}">
+                {% csrf_token %}
+                <button type="submit">Update Rankings</button>
+            </form>
+            
         </form>
     </div>
     <footer>

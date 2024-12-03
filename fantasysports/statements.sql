@@ -165,3 +165,22 @@ VALUES
 (1, '2024-01-15', 'Los Angeles Lakers, Phoenix Suns'),
 (2, '2024-01-20', 'Inter Miami, Al Nassr'),
 (3, '2024-01-25', 'Tampa Bay Buccaneers, Golden State Warriors');
+
+
+--Function
+
+CREATE OR REPLACE FUNCTION updateRankings()
+RETURNS VOID AS $$
+BEGIN
+    WITH ranked_teams AS (
+        SELECT 
+            team_id,
+            RANK() OVER (ORDER BY total_points_scored DESC) AS new_rank
+        FROM team
+    )
+    UPDATE team
+    SET ranking = ranked_teams.new_rank
+    FROM ranked_teams
+    WHERE team.team_id = ranked_teams.team_id;
+END;
+$$ LANGUAGE plpgsql;

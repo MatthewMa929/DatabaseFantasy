@@ -13,6 +13,8 @@ from django.db import connection
 import logging
 from django.views.decorators.cache import never_cache
 from django.http import HttpResponseForbidden
+from django.shortcuts import redirect
+
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +27,7 @@ def home(request):
         return query(request)
     else:
         return render(request, 'coreapp/home.html')
-
+    
 @csrf_protect
 @login_required
 def teams_view(request):
@@ -33,108 +35,93 @@ def teams_view(request):
         operation = request.POST.get('operation')
         record_id = request.POST.get('team_id')
         league_id = request.POST.get('league_id')
+        user_id = request.POST.get('user_id')
         team_name = request.POST.get('team_name')
         total_points_scored = request.POST.get('total_points_scored')
-        ranking = request.POST.get('ranking')
         status = request.POST.get('status')
-
+        
         try:
             with connection.cursor() as cursor:
                 if operation == 'create':
-                    # Validate input parameters
-                    if not (league_id and team_name and total_points_scored and ranking and status):
-                        messages.error(request, "All fields are required for creating a team.")
-                        return render(request, 'coreapp/user/teams.html')
-
-                    # Create a new team
                     cursor.execute("""
-                        INSERT INTO team (league_id, team_name, total_points_scored, ranking, status)
+                        INSERT INTO team (league_id, user_id, team_name, total_points_scored, status)
                         VALUES (%s, %s, %s, %s, %s)
-                    """, [league_id, team_name, total_points_scored, ranking, status])
+                    """, [league_id, user_id, team_name, total_points_scored, status])
                     messages.success(request, f"Team '{team_name}' created successfully.")
-
+                
                 elif operation == 'update':
-                    # Validate input parameters
-                    if not (record_id and league_id and team_name and total_points_scored and ranking and status):
-                        messages.error(request, "All fields and a valid Team ID are required for updating a team.")
-                        return render(request, 'coreapp/user/teams.html')
-
-                    # Update an existing team
-                    cursor.execute("""
-                        UPDATE team
-                        SET league_id = %s, team_name = %s, total_points_scored = %s, ranking = %s, status = %s
-                        WHERE team_id = %s
-                    """, [league_id, team_name, total_points_scored, ranking, status, record_id])
-                    messages.success(request, f"Team with ID {record_id} updated successfully.")
-
-                elif operation == 'delete':
-                    # Validate Team ID
                     if not record_id:
-                        messages.error(request, "Team ID is required for deletion.")
-                        return render(request, 'coreapp/user/teams.html')
-
-                    # Delete an existing team
-                    cursor.execute("DELETE FROM team WHERE team_id = %s", [record_id])
-                    messages.success(request, f"Team with ID {record_id} deleted successfully.")
-
+                        messages.error(request, "Team ID is required for update.")
+                    else:
+                        cursor.execute("""
+                            UPDATE team
+                            SET league_id = %s, user_id = %s, team_name = %s, total_points_scored = %s, status = %s
+                            WHERE team_id = %s
+                        """, [league_id, user_id, team_name, total_points_scored, status, record_id])
+                        messages.success(request, f"Team with ID {record_id} updated successfully.")
+                
+                elif operation == 'delete':
+                    if not record_id:
+                        messages.error(request, "Team ID is required for delete.")
+                    else:
+                        cursor.execute("DELETE FROM team WHERE team_id = %s", [record_id])
+                        messages.success(request, f"Team with ID {record_id} deleted successfully.")
+                
                 else:
                     messages.error(request, "Invalid operation type selected.")
 
-        except Exception as e:
-            logger.error(f"Error in teams_view: {str(e)}")
-            messages.error(request, f"An error occurred: {str(e)}")
+                # Update rankings
+                cursor.execute("SELECT updateRankings();")
+                messages.success(request, "Rankings updated successfully.")
 
-    return render(request, 'coreapp/user/teams.html')
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+    
+    try:
+        # Fetch all teams for the table display
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT team_id, team_name, league_id, total_points_scored, ranking, status, user_id
+                FROM team
+                ORDER BY ranking ASC
+            """)
+            teams = cursor.fetchall()
+    except Exception as e:
+        messages.error(request, f"An error occurred while fetching teams: {str(e)}")
+        teams = []
+
+    return render(request, 'coreapp/user/teams.html', {'teams': teams})
+
 
 
 @csrf_exempt
 @login_required
 def edit_record(request):
-    """
-    Updates an existing record in the database.
-    """
-    
-
     if request.method != 'POST':
         return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=400)
 
-
     data = json.loads(request.body)
     table = data.get('table')
-    record_id = data.get('id')  
-    updates = data.get('updates')  
+    record_id = data.get('id')
+    updates = data.get('updates')
 
-    query_dict = {
-        'player': "UPDATE player SET {updates} WHERE player_id = %s",
-        'team': "UPDATE team SET {updates} WHERE team_id = %s",
-        'league': "UPDATE league SET {updates} WHERE league_id = %s",
-        'match_data': "UPDATE match_data SET {updates} WHERE match_id = %s",
-    }
+    allowed_tables = ['player', 'team', 'league', 'match_data']
+    if table not in allowed_tables:
+        return JsonResponse({'success': False, 'error': 'Invalid table selected.'}, status=400)
 
     try:
-        query = query_dict.get(table)
-        if not query:
-            return JsonResponse({'success': False, 'error': 'Invalid table selected.'}, status=400)
-
+        # Dynamically update based on the table and fields
         set_clause = ', '.join([f"{key} = %s" for key in updates.keys()])
-        values = list(updates.values())
-        values.append(record_id)  
-        query = query.replace("{updates}", set_clause)
+        values = list(updates.values()) + [record_id]
 
+        query = f"UPDATE {table} SET {set_clause} WHERE {table}_id = %s"
         with connection.cursor() as cursor:
             cursor.execute(query, values)
 
         return JsonResponse({'success': True, 'message': 'Record updated successfully.'})
-
     except Exception as e:
-        return JsonResponse({'success': False, 'error': 'An error occurred: ' + str(e)}, status=400)
+        return JsonResponse({'success': False, 'error': f"An error occurred: {str(e)}"}, status=400)
 
-from django.db import connection
-from django.http import JsonResponse
-from django.contrib import messages
-from django.shortcuts import render
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
-from django.contrib.auth.decorators import login_required
 
 @csrf_protect
 @login_required
