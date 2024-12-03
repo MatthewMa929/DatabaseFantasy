@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Player - Fantasy Sports Data Repository</title>
+    <title>Manage Records - Fantasy Sports Data Repository</title>
     <link rel="stylesheet" href="{% static 'coreapp/manage.css' %}">
 </head>
 
@@ -21,7 +21,7 @@
         </nav>
     </header>
     <div class="container">
-        <h1>Manage Player</h1>
+        <h1>Manage Records</h1>
         {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -43,12 +43,32 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label for="table-select">Select Table:</label>
+                <select id="table-select" name="table" required>
+                    <option value="player">Player</option>
+                    <option value="team">Team</option>
+                    <option value="league">League</option>
+                </select>
+            </div>
+
             <div class="form-group" id="record-id-group" style="display: none;">
                 <label for="record-id">Record ID:</label>
                 <input type="number" id="record-id" name="record_id" placeholder="Enter record ID">
             </div>
 
-            <div id="fields-container">
+            <div id="fields-container"></div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <footer>
+        <p>2024 Fantasy Sports Platform</p>
+    </footer>
+
+    <script>
+        const tableFields = {
+            player: `
                 <div class="form-group">
                     <label for="full_name">Full Name:</label>
                     <input type="text" id="full_name" name="full_name">
@@ -77,20 +97,53 @@
                         <option value="Retired">Retired</option>
                     </select>
                 </div>
-            </div>
+            `,
+            team: `
+                <div class="form-group">
+                    <label for="team_name">Team Name:</label>
+                    <input type="text" id="team_name" name="team_name">
+                </div>
+                <div class="form-group">
+                    <label for="total_points_scored">Total Points Scored:</label>
+                    <input type="number" id="total_points_scored" name="total_points_scored">
+                </div>
+                <div class="form-group">
+                    <label for="ranking">Ranking:</label>
+                    <input type="number" id="ranking" name="ranking">
+                </div>
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <input type="text" id="status" name="status">
+                </div>
+            `,
+            league: `
+                <div class="form-group">
+                    <label for="league_name">League Name:</label>
+                    <input type="text" id="league_name" name="league_name">
+                </div>
+                <div class="form-group">
+                    <label for="league_type">League Type:</label>
+                    <input type="text" id="league_type" name="league_type">
+                </div>
+                <div class="form-group">
+                    <label for="draft_date">Draft Date:</label>
+                    <input type="date" id="draft_date" name="draft_date">
+                </div>
+                <div class="form-group">
+                    <label for="max_teams">Max Teams:</label>
+                    <input type="number" id="max_teams" name="max_teams">
+                </div>
+            `
+        };
 
-            <button type="submit">Submit</button>
-        </form>
-    </div>
-    <footer>
-        <p>2024 Fantasy Sports Platform</p>
-    </footer>
-
-    <script>
-        // Handle operation type change
-        const operationOptions = document.getElementsByName('operation');
-        const recordIdGroup = document.getElementById('record-id-group');
+        const tableSelect = document.getElementById('table-select');
         const fieldsContainer = document.getElementById('fields-container');
+        const recordIdGroup = document.getElementById('record-id-group');
+        const operationOptions = document.getElementsByName('operation');
+
+        tableSelect.addEventListener('change', function () {
+            fieldsContainer.innerHTML = tableFields[this.value];
+        });
 
         operationOptions.forEach(option => {
             option.addEventListener('change', function () {
@@ -106,6 +159,8 @@
                 }
             });
         });
+
+        fieldsContainer.innerHTML = tableFields['player'];
     </script>
 </body>
 

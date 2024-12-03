@@ -12,10 +12,13 @@ from .forms import UserRegisterForm
 from django.db import connection
 import logging
 from django.views.decorators.cache import never_cache
+from django.http import HttpResponseForbidden
 
 logger = logging.getLogger(__name__)
 
-
+def is_admin(user):
+    """Helper function to check if the user is an admin."""
+    return user.email.endswith('@admin.com')
 
 def home(request):
     if request.user.is_authenticated:
@@ -29,8 +32,13 @@ def edit_record(request):
     """
     Updates an existing record in the database.
     """
+    
+    if not is_admin(request.user):
+        return HttpResponseForbidden("You do not have permission to edit records.")
+
     if request.method != 'POST':
         return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=400)
+
 
     data = json.loads(request.body)
     table = data.get('table')
@@ -73,6 +81,10 @@ from django.contrib.auth.decorators import login_required
 @csrf_protect
 @login_required
 def manage_view(request):
+    if not is_admin(request.user):
+        messages.error(request, "You do not have permission to manage records.")
+        return redirect('home')
+    
     if request.method == 'POST':
         operation = request.POST.get('operation')
         
