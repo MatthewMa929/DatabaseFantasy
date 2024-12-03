@@ -40,8 +40,8 @@ def edit_record(request):
 
     data = json.loads(request.body)
     table = data.get('table')
-    record_id = data.get('id')  # The unique identifier for the record
-    updates = data.get('updates')  # Dictionary of fields to update
+    record_id = data.get('id')  
+    updates = data.get('updates')  
 
     query_dict = {
         'player': "UPDATE player SET {updates} WHERE player_id = %s",
@@ -55,10 +55,9 @@ def edit_record(request):
         if not query:
             return JsonResponse({'success': False, 'error': 'Invalid table selected.'}, status=400)
 
-        # Dynamically create the SET clause and parameters
         set_clause = ', '.join([f"{key} = %s" for key in updates.keys()])
         values = list(updates.values())
-        values.append(record_id)  # Add record_id as the last parameter
+        values.append(record_id)  
         query = query.replace("{updates}", set_clause)
 
         with connection.cursor() as cursor:
@@ -81,122 +80,114 @@ from django.contrib.auth.decorators import login_required
 def manage_view(request):
     if not is_admin(request.user):
         return redirect('home')
-    
+
     if request.method == 'POST':
         operation = request.POST.get('operation')
-        
-        # #Change this to fit whatever the dropdown bar value is
-        # # Draft table
-        # draft_id = request.POST.get('DraftID')
-        # league_id = request.POST.get('league_id')
-        # player_id = request.POST.get('player_id')
-        # draft_date = request.POST.get('draft_date')
-        # draft_order = request.POST.get('draft_order')
-        # draft_status = request.POST.get('draft_status')
-
-        # # League table
-        # league_id = request.POST.get('league_id')
-        # user_id = request.POST.get('UserID')
-        # league_name = request.POST.get('league_name')
-        # league_type = request.POST.get('league_type')
-        # draft_date = request.POST.get('draft_date')
-        # max_teams = request.POST.get('max_teams')
-
-        # # Match data table
-        # match_id = request.POST.get('match_id')
-        # team_id = request.POST.get('team_id')
-        # match_date = request.POST.get('match_date')
-        # final_score = request.POST.get('final_score')
-        # winner = request.POST.get('winner')
-
-        # # Match event table
-        # match_event_id = request.POST.get('MatchEventID')
-        # match_id = request.POST.get('match_id')
-        # player_id = request.POST.get('player_id')
-        # event_type = request.POST.get('event_type')
-        # event_time = request.POST.get('event_time')
-        # fantasy_points = request.POST.get('fantasy_points')
-
-        # # Match team table
-        # match_team_id = request.POST.get('Matchteam_id')
-        # match_id = request.POST.get('match_id')
-        # team_id = request.POST.get('team_id')
-
-        # Player table
+        table = request.POST.get('table')
         record_id = request.POST.get('record_id')
-        full_name = request.POST.get('full_name')
-        sport = request.POST.get('sport')
-        real_team = request.POST.get('real_team')
-        position = request.POST.get('position')
-        fantasy_points = request.POST.get('fantasy_points')
-        availability_status = request.POST.get('availability_status')
-
-        # # Player stats table
-        # player_stats_id = request.POST.get('PlayerStatsID')
-        # player_id = request.POST.get('player_id')
-        # game_date = request.POST.get('game_date')
-        # performance_stats = request.POST.get('performance_stats')
-        # injury_status = request.POST.get('injury_status')
-
-        # # Team table
-        # team_id = request.POST.get('team_id')
-        # league_id = request.POST.get('league_id')
-        # user_id = request.POST.get('UserID')
-        # team_name = request.POST.get('team_name')
-        # total_points_scored = request.POST.get('total_points_scored')
-        # ranking = request.POST.get('ranking')
-        # status = request.POST.get('status')
-
-        # # Trade table
-        # trade_id = request.POST.get('TradeID')
-        # player_id = request.POST.get('player_id')
-        # trade_date = request.POST.get('trade_date')
-        # teams_involved = request.POST.get('teams_involved')
-
-        # # User data table
-        # user_id = request.POST.get('UserID')
-        # full_name = request.POST.get('full_name')
-        # email = request.POST.get('email')
-        # username = request.POST.get('username')
-        # password = request.POST.get('password')
-        # profile_settings = request.POST.get('profile_settings')
-
-        # # Waiver table
-        # waiver_id = request.POST.get('WaiverID')
-        # team_id = request.POST.get('team_id')
-        # waiver_status = request.POST.get('waiver_status')
-        # waiver_pickup_date = request.POST.get('waiver_pickup_date')
-
 
         try:
             with connection.cursor() as cursor:
                 if operation == 'create':
-                    # Create a new player
-                    cursor.execute("""
-                        INSERT INTO player (full_name, sport, real_team, position, fantasy_points, availability_status)
-                        VALUES (%s, %s, %s, %s, %s, %s)
-                    """, [full_name, sport, real_team, position, fantasy_points, availability_status])
-                    messages.success(request, f"Player '{full_name}' created successfully.")
+                    if table == 'player':
+                        full_name = request.POST.get('full_name')
+                        sport = request.POST.get('sport')
+                        real_team = request.POST.get('real_team')
+                        position = request.POST.get('position')
+                        fantasy_points = request.POST.get('fantasy_points')
+                        availability_status = request.POST.get('availability_status')
+                        cursor.execute("""
+                            INSERT INTO player (full_name, sport, real_team, position, fantasy_points, availability_status)
+                            VALUES (%s, %s, %s, %s, %s, %s)
+                        """, [full_name, sport, real_team, position, fantasy_points, availability_status])
+                        messages.success(request, f"Player '{full_name}' created successfully.")
+                    elif table == 'team':
+                        league_id = request.POST.get('league_id')
+                        user_id = request.POST.get('user_id')
+                        team_name = request.POST.get('team_name')
+                        total_points_scored = request.POST.get('total_points_scored')
+                        ranking = request.POST.get('ranking')
+                        status = request.POST.get('status')
+                        cursor.execute("""
+                            INSERT INTO team (league_id, user_id, team_name, total_points_scored, ranking, status)
+                            VALUES (%s, %s, %s, %s)
+                        """, [league_id, user_id, team_name, total_points_scored, ranking, status])
+                        messages.success(request, f"Team '{team_name}' created successfully.")
 
+                    elif table == 'league':
+                        user_id = request.POST.get('user_id')
+                        league_name = request.POST.get('league_name')
+                        league_type = request.POST.get('league_type')
+                        draft_date = request.POST.get('draft_date')
+                        max_teams = request.POST.get('max_teams')
+                        cursor.execute("""
+                            INSERT INTO league (user_id, league_name, league_type, draft_date, max_teams)
+                            VALUES (%s, %s, %s, %s)
+                        """, [user_id, league_name, league_type, draft_date, max_teams])
+                        messages.success(request, f"League '{league_name}' created successfully.")
+
+                    else:
+                        messages.error(request, "Invalid table selected for creation.")
+                
                 elif operation == 'update':
-                    # Update an existing player
                     if not record_id:
                         messages.error(request, "Record ID is required for update.")
-                    else:
+                    elif table == 'player':
+                        full_name = request.POST.get('full_name')
+                        sport = request.POST.get('sport')
+                        real_team = request.POST.get('real_team')
+                        position = request.POST.get('position')
+                        fantasy_points = request.POST.get('fantasy_points')
+                        availability_status = request.POST.get('availability_status')
                         cursor.execute("""
                             UPDATE player
                             SET full_name = %s, sport = %s, real_team = %s, position = %s, fantasy_points = %s, availability_status = %s
                             WHERE player_id = %s
                         """, [full_name, sport, real_team, position, fantasy_points, availability_status, record_id])
                         messages.success(request, f"Player with ID {record_id} updated successfully.")
-
-                elif operation == 'delete':
-                    # Delete an existing player
-                    if not record_id:
-                        messages.error(request, "Record ID is required for delete.")
+                    elif table == 'team':
+                        league_id = request.POST.get('league_id')
+                        user_id = request.POST.get('user_id')
+                        team_name = request.POST.get('team_name')
+                        total_points_scored = request.POST.get('total_points_scored')
+                        ranking = request.POST.get('ranking')
+                        status = request.POST.get('status')
+                        cursor.execute("""
+                            UPDATE team
+                            SET league_id = %s, user_id = %s, team_name = %s, total_points_scored = %s, ranking = %s, status = %s
+                            WHERE team_id = %s
+                        """, [league_id, user_id, team_name, total_points_scored, ranking, status, record_id])
+                        messages.success(request, f"Team with ID {record_id} updated successfully.")
+                    elif table == 'league':
+                        user_id = request.POST.get('user_id')
+                        league_name = request.POST.get('league_name')
+                        league_type = request.POST.get('league_type')
+                        draft_date = request.POST.get('draft_date')
+                        max_teams = request.POST.get('max_teams')
+                        cursor.execute("""
+                            UPDATE league
+                            SET user_id = %s,league_name = %s, league_type = %s, draft_date = %s, max_teams = %s
+                            WHERE league_id = %s
+                        """, [user_id, league_name, league_type, draft_date, max_teams, record_id])
+                        messages.success(request, f"League with ID {record_id} updated successfully.")
                     else:
-                        cursor.execute("DELETE FROM player WHERE player_id = %s", [record_id])
-                        messages.success(request, f"Player with ID {record_id} deleted successfully.")
+                        messages.error(request, "Invalid table selected for update.")
+                
+                elif operation == 'delete':
+                    if not record_id:
+                        messages.error(request, "Record ID is required for deletion.")
+                    else:
+                        query_dict = {
+                            'player': "DELETE FROM player WHERE player_id = %s",
+                            'team': "DELETE FROM team WHERE team_id = %s",
+                            'league': "DELETE FROM league WHERE league_id = %s",
+                        }
+                        query = query_dict.get(table)
+                        if query:
+                            cursor.execute(query, [record_id])
+                            messages.success(request, f"Record with ID {record_id} deleted successfully from {table}.")
+                        else:
+                            messages.error(request, "Invalid table selected for deletion.")
 
                 else:
                     messages.error(request, "Invalid operation type selected.")
@@ -207,6 +198,7 @@ def manage_view(request):
     return render(request, 'coreapp/manage.html')
 
 
+
 @never_cache
 @csrf_protect
 @login_required
@@ -214,7 +206,6 @@ def activity_view(request):
     data = {}
     try:
         with connection.cursor() as cursor:
-            # Fetch table names excluding coreapp_ prefixed tables
             if not is_admin(request.user):
                 cursor.execute("""
                     SELECT table_name
@@ -252,34 +243,69 @@ def activity_view(request):
 @login_required
 def delete_record(request):
     """
-    Deletes an existing record from the database.
+    Deletes a record from the specified table, ensuring related records are handled manually.
     """
     if request.method != 'POST':
         return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=400)
 
     data = json.loads(request.body)
     table = data.get('table')
-    record_id = data.get('id')  # The unique identifier for the record
+    record_id = data.get('id')
+
+    dependency_cleanup = {
+        'player': [
+            {"table": "player_stats", "column": "player_id"},
+            {"table": "match_event", "column": "player_id"},
+            {"table": "trade", "column": "player_id"},
+        ],
+        'league': [
+            {"table": "draft", "column": "league_id"},
+        ],
+        'team': [
+            {"table": "match_data", "column": "team_id"},
+            {"table": "waiver", "column": "team_id"},
+            {"table": "match_team", "column": "team_id"},
+            {"table": "trade", "column": "team_id"}, 
+        ],
+        'match_data': [
+            {"table": "match_event", "column": "match_id"},
+            {"table": "match_team", "column": "match_id"},
+        ],
+    }
 
     query_dict = {
-        'player': "DELETE FROM player WHERE player_id = %s",
-        'team': "DELETE FROM team WHERE team_id = %s",
         'league': "DELETE FROM league WHERE league_id = %s",
+        'team': "DELETE FROM team WHERE team_id = %s",
+        'player': "DELETE FROM player WHERE player_id = %s",
         'match_data': "DELETE FROM match_data WHERE match_id = %s",
     }
 
-    try:
-        query = query_dict.get(table)
-        if not query:
-            return JsonResponse({'success': False, 'error': 'Invalid table selected.'}, status=400)
+    query = query_dict.get(table)
 
+    try:
         with connection.cursor() as cursor:
+            if table in dependency_cleanup:
+                for dependency in dependency_cleanup[table]:
+                    dep_table = dependency['table']
+                    dep_column = dependency['column']
+                    cursor.execute(f"DELETE FROM {dep_table} WHERE {dep_column} = %s", [record_id])
+
+            if not query:
+                return JsonResponse({'success': False, 'error': 'Invalid table selected.'}, status=400)
+
             cursor.execute(query, [record_id])
 
-        return JsonResponse({'success': True, 'message': 'Record deleted successfully.'})
+        return JsonResponse({'success': True, 'message': f'Record deleted successfully from {table}.'})
 
     except Exception as e:
-        return JsonResponse({'success': False, 'error': 'An error occurred: ' + str(e)}, status=400)
+        if "violates foreign key constraint" in str(e):
+            return JsonResponse({
+                'success': False,
+                'error': f"Cannot delete {table} record because it is still referenced in another table. "
+                         f"Ensure all dependencies are removed first."
+            }, status=400)
+        return JsonResponse({'success': False, 'error': f'An error occurred: {str(e)}'}, status=400)
+
 
 @csrf_protect
 @login_required
@@ -315,7 +341,6 @@ def check_write_access(request):
 
     try:
         with connection.cursor() as cursor:
-            # Check if the user has INSERT privileges on the 'player' table
             cursor.execute(
                 "SELECT has_table_privilege(%s, 'player', 'INSERT')", 
                 [request.user.username]
@@ -341,14 +366,13 @@ def user_register(request):
                         form.add_error('email', 'Email already in use. Please choose a different one.')
                     else:
                         user = form.save()
-                        # Assign role based on email domain
                         role = 'admin' if '@admin.com' in username else 'read_only'
 
                         with connection.cursor() as cursor:
                             cursor.execute(f"CREATE USER \"{username}\" WITH PASSWORD %s", [password])
                             cursor.execute(f"GRANT {role} TO \"{username}\"")
                             if role == 'admin':
-                                cursor.execute(f"GRANT INSERT ON ALL TABLES IN SCHEMA fantasy_sports TO \"{username}\"")
+                                cursor.execute(f"GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA fantasy_sports TO \"{username}\"")
                         login(request, user)
                         return redirect(reverse('query'))
 
@@ -420,7 +444,6 @@ def create_view(request):
         return redirect('home')
 
     if request.method == 'POST':
-        # Extract player data from POST request
         full_name = request.POST.get('full_name')
         sport = request.POST.get('sport')
         real_team = request.POST.get('real_team')
@@ -431,7 +454,6 @@ def create_view(request):
         logger.info(f"Received player data: {full_name}, {sport}, {real_team}, {position}, {fantasy_points}, {availability_status}")
 
         try:
-            # Insert the player into the database
             with connection.cursor() as cursor:
                 cursor.execute("""
                     INSERT INTO player (full_name, sport, real_team, position, fantasy_points, availability_status)
@@ -488,8 +510,8 @@ def edit_record(request):
 
     data = json.loads(request.body)
     table = data.get('table')
-    record_id = data.get('id')  # The unique identifier for the record
-    updates = data.get('updates')  # Dictionary of fields to update
+    record_id = data.get('id')
+    updates = data.get('updates')
 
     query_dict = {
         'player': "UPDATE player SET {updates} WHERE player_id = %s",
@@ -503,10 +525,9 @@ def edit_record(request):
         if not query:
             return JsonResponse({'success': False, 'error': 'Invalid table selected.'}, status=400)
 
-        # Dynamically create the SET clause and parameters
         set_clause = ', '.join([f"{key} = %s" for key in updates.keys()])
         values = list(updates.values())
-        values.append(record_id)  # Add record_id as the last parameter
+        values.append(record_id)
         query = query.replace("{updates}", set_clause)
 
         with connection.cursor() as cursor:
